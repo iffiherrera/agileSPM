@@ -1,0 +1,38 @@
+
+/**** Flexbox specific styles for responsive site ****/
+
+/* SOW container*/
+.container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: baseline;
+}
+
+/* Rest of site container*/
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* Navigation bar desktop size/default container */
+.navigation {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+  }
+  
+  /* Navigation bar medium screens centers it */
+  @media all and (max-width: 800px) {
+    .navigation {
+      justify-content: space-around;
+    }
+  }
+  
+  /* Navigation bar on small screens, stacks items*/
+  @media all and (max-width: 500px) {
+    .navigation {
+      flex-direction: column;
+    }
+  }
