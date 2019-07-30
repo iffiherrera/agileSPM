@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <title>agileSPM - Create Dynamic Agile Statements of Work </title>
+        <link rel="stylesheet" href="{% static "css/base.css" %}"/>
+        <script src="{% static "js/jquery.js" %}"></script>
+    </head>
+    <body>
+        <h1>Index h1</h1>
+        <div>
+            First div <br/>
+            {{ message2 }}<br/>
+        </div>
+        <div>
+            link to kanban <a href='/agileSPM/sow_kanban'>Kanban</a><br/>
+            <img src="{% static "images/static.jpg" %}" alt="Test"/>
+        </div>
+    </body>
+</html>
