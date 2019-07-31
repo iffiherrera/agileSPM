@@ -4,6 +4,7 @@ import datetime
 #Statement of Work database fields
 class SOW(models.Model):
     title = models.TextField(unique=True)
+    produced_by = models.CharField(max_length=128, blank=True)
     updated = models.DateTimeField('Last updated')
     date_project = models.DateField(default=datetime.date.today)
     intro = models.TextField(blank=True)
