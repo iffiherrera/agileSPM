@@ -1,7 +1,11 @@
 from django.db import models
 import datetime
 
-#Statement of Work database fields
+# User database field
+
+# User authentication 
+
+# Statement of Work database fields
 class SOW(models.Model):
     title = models.TextField(unique=True)
     produced_by = models.CharField(max_length=128, blank=True)
@@ -24,6 +28,7 @@ class SOW(models.Model):
 
 #Scrum specific data fields, foreign key to SOW
 class Scrum(models.Model):
+    # Set a sprint number amount
     SPRINT_NUMBER = ( 
         ('1', 'one'),
         ('2', 'two'),
@@ -33,10 +38,6 @@ class Scrum(models.Model):
     scrum = models.ForeignKey(SOW, on_delete=models.CASCADE)
     sprintLength = models.IntegerField(blank=False)
     sprint = models.IntegerField(default=1,choices=SPRINT_NUMBER)
-    sprintBacklog1 = models.TextField(blank=True)
-    sprintBacklog2 = models.TextField(blank=True)
-    sprintBacklog3 = models.TextField(blank=True)
-    sprintBacklog4 = models.TextField(blank=True)
     sprintPlan = models.TextField(blank=True)
     team = models.TextField(blank=True)
     done = models.TextField(blank=True)
@@ -54,18 +55,15 @@ class Kanban(models.Model):
         ('6', 'six'),
     )
     kanban = models.ForeignKey(SOW,on_delete=models.CASCADE)
+    plan = models.TextField(blank=True)
     columns = models.IntegerField(default=1,choices=WORKFLOW_COLUMNS)
-    column1 = models.CharField(max_length=128, blank=True)
-    column2 = models.CharField(max_length=128, blank=True)
-    column3 = models.CharField(max_length=128, blank=True)
-    column4 = models.CharField(max_length=128, blank=True)
-    column5 = models.CharField(max_length=128, blank=True)
-    column6 = models.CharField(max_length=128, blank=True)
+    column_labels = models.TextField(blank=True)
     wipLimit = models.IntegerField(default=1,blank=False)
+    delivery = models.DateField(default=datetime.date.today)
 
 # Scrumban specific data fields, Foreign Key to SOW
 class Scrumban(models.Model):
-     # Set a column amount.
+     # Set an iteration amount.
     ITERATIONS = (
         ('1', 'one'),
         ('2', 'two'),
@@ -73,13 +71,11 @@ class Scrumban(models.Model):
         ('4', 'four'),
     )
     scrumban = models.ForeignKey(SOW,on_delete=models.CASCADE)
+    plan = models.TextField(blank=True)
     iterations = models.IntegerField(default=1,choices=ITERATIONS)
-    it1 = models.TextField(blank=True)
-    it2 = models.TextField(blank=True)
-    it3 = models.TextField(blank=True)
-    it4 = models.TextField(blank=True)
     team = models.TextField(blank=True)
     wipLimit = models.IntegerField(default=1,blank=False)
+    review = models.TextField(blank=True)
 
 
 
