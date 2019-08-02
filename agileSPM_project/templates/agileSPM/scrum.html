@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+<html lang="en"></html>
+
 <html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+        
     <head>
-        <title>agileSPM - Create Dynamic Agile Statements of Work </title>
-        <link rel="stylesheet" href="{% static "css/base.css" %}"/>
-        <script src="{% static "js/jquery.js" %}"></script>
+        <!-- Imported CSS stylesheets & JavaScript-->
+        <title> Agile Scrum Project </title>
+        <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" />
+        <script src="{% static "js/index.js" %}"></script>
     </head>
+
     <body>
-        <h1>Index h1</h1>
+        <!-- Menu/Navigation bar-->
+        
+
         <div>
-            First div <br/>
-            {{ message2 }}<br/>
+            {% if slug_doc %}
+                <h1>{{ slug_doc.title }}</h1>
+                {% if specific_doc %}
+                <ul>
+                {% for docs in specific_doc %}
+                        <li><a href="{{ docs.title }}">{{ docs.title }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                    There are no Scrum projects working.
+                {% endif%}
+            {% else %}
+                Does not exist
+            {% endif %}
         </div>
-        <div>
-            link to kanban <a href='/agileSPM/sow_kanban'>Kanban</a><br/>
-            <img src="{% static "images/static.jpg" %}" alt="Test"/>
-        </div>
-    </body>
+
+        </body>
 </html>

@@ -1,18 +1,45 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from agileSPM import models
-
+from agileSPM.models import SOW, Scrum, Kanban, Scrumban
+from agileSPM.forms import CoverForm1, IntroForm2, ObjectivesForm3, ScopeForm4, ScrumForm6, KanbanForm6
+from agileSPM.forms import BacklogForm5, MilestonesForm7, CostForm8, AcceptanceForm9, ScrumbanForm6
+from formtools.wizard.views import WizardView, SessionWizardView
 
 # Home view 
 def index(request):  
-    return render(request, 'agileSPM/index.html')
-   
+    sow = SOW.objects.all()
+    context_dict = {'sow_doc': sow}
+    return render(request, 'agileSPM/index.html', context_dict)
+
+# Form view 
+def input_doc(request):
+    form1 =  CoverForm()
+
+    if request.method == 'POST':
+        form1 = CoverForm(request.POST)
+
+        if form1.is_valid():
+            form1.save(commit=True)
+            return index(request)
+
+        else:
+            print(form1.errors)
+    return render(request, 'agileSPM/index.html', {'form': form1})
+
+# Form wizard view
+# class WizardView(request):
+#     WizardView.done(form_list, form_dict, **kwargs)
+
+# class SowWizard(SessionWizardView):
+#     def done(self, form_list, **kwargs):
+#         #Something it does here.
+#         return HttpResponseRedirect('/agileSPM/')
+
 # Scrum view
 def sow_scrum(request):
-    context_dict = {'message2' : "scrum check"}
-    return render(request, 'agileSPM/scrum.html', context=context_dict)
+    return render(request, 'agileSPM/scrum.html')
 
 # Kanban view
 def sow_kanban(request):

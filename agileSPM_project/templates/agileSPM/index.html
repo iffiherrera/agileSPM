@@ -16,5 +16,20 @@
     <body>
         <!-- Menu/Navigation bar-->
         <a href="/agileSPM/scrum_doc/">Download Scrum document</a>
+        
+        <div>
+            {% if sow %}
+            <ul>
+                {% for docs in sow %}
+                    <li>
+                        <a href="/agileSPM/sow_scrum/{{ docs.slug }}">{{ docs.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                There are no documents present.
+            {% endif%}
+        </div>
+
         </body>
 </html>
