@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+{% extends 'agileSPM/base.html' %}
 {% load staticfiles %}
+
 <html lang="en"></html>
 
 <html>
@@ -8,7 +10,6 @@
         
     <head>
         <!-- Imported CSS stylesheets & JavaScript-->
-        <title>agileSPM - Create Dynamic Agile Statements of Work </title>
         <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" />
         <script src="{% static "js/index.js" %}"></script>
     </head>
@@ -18,17 +19,7 @@
         <a href="/agileSPM/scrum_doc/">Download Scrum document</a>
         
         <div>
-            {% if sow %}
-            <ul>
-                {% for docs in sow %}
-                    <li>
-                        <a href="/agileSPM/sow_scrum/{{ docs.slug }}">{{ docs.title }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-                There are no documents present.
-            {% endif%}
+
         </div>
 
         </body>

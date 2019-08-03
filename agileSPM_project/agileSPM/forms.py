@@ -1,6 +1,28 @@
 from django import forms
-from agileSPM.models import SOW, Scrum, Kanban, Scrumban
+from django.forms import ModelForm
+from .models import SOW, Scrum, Kanban, Scrumban, UserProfile
+from django.contrib.auth.models import User
 import datetime
+
+# User forms & Login/Sign up forms 
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User 
+        fields = ('username','email','password')
+
+    # method ensuring the email provided does not already exist in database.
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("The email you have chosen already exists, please choose another.")
+        return email
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('picture',)
 
 ## Statement of Work models are divided into smaller forms as each form 
 # sits on an individual page. The use the formstools wizard to combine.## 

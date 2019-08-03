@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head lang="en">
+        <meta charset="UTF-8" />
+        <title>agileSPM - 
+            {% block title_block %}
+            Create Dynamic Statements of Work 
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <div>
+            {% block body_block %}
+           
+            {% endblock %}
+        </div>
+    <div>
+        <hr/>
+        <!-- footer -->
+        <a href="{% url 'sow_scrum'%}">Scrum Form</a>
+    </div>
+    </body>
+</html>

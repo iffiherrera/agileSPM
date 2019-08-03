@@ -10,10 +10,8 @@ from .forms import KanbanForm6, ScrumbanForm6, MilestonesForm7, CostForm8, Accep
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    # url(r'^sow_scrum/(?P<sow_slug_title>[\w\-]+)/$', views.sow_scrum, name='scrum'),
-    # url(r'^sow_scrum_view/(?P<step>.+)/$', views.sow_scrum_view, name='scrum_step'),
-    # url(r'^sow_scrum_view/$',views.sow_scrum_view,name='scrum'),
-    url(r'^my_docs/', views.my_docs, name='docs'),
+    url(r'^my_docs/', views.my_docs, name='my_docs'),
+    url(r'^register/$', views.register, name='register'),
     # Scrum form view
     url(r'^sow_scrum/$',Scrum_Sow_Wizard.as_view([CoverForm1,IntroForm2,ObjectivesForm3,ScopeForm4,BacklogForm5,
                                                     ScrumForm6,MilestonesForm7,CostForm8,AcceptanceForm9])),

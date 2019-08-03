@@ -1,11 +1,14 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, reverse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from .models import SOW, Scrum, Kanban, Scrumban
 from .forms import CoverForm1, IntroForm2, ObjectivesForm3, ScopeForm4, ScrumForm6, KanbanForm6
-from .forms import BacklogForm5, MilestonesForm7, CostForm8, AcceptanceForm9, ScrumbanForm6
+from .forms import BacklogForm5, MilestonesForm7, CostForm8, AcceptanceForm9, ScrumbanForm6, UserForm, UserProfileForm
 from formtools.wizard.views import WizardView, SessionWizardView
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 
 # from formtools.preview import FormPreview
 
@@ -48,8 +51,91 @@ SCRUMBAN_FORM = (
 
 
 # Home view 
-def index(request):  
-    return render(request, 'agileSPM/index.html')
+def index(request):
+    user_form = UserForm()
+    profile_form = UserProfileForm()
+
+    context_dict = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    }
+    return render(request, 'agileSPM/index.html', context=context_dict)
+
+# User account view 
+@login_required()
+def my_docs(request):
+    user_form = UserForm()
+    profile_form = UserProfileForm()
+    profile = UserProfile.objects.filter(user=request.user)[0]
+
+    context_dict = {'user_form': user_form,
+                    'profile_form': profile_form,
+                    'profile': profile,}
+
+    return render(request, 'agile/SPM/docs.html', context=context_dict)
+
+# Pop up login/sign up function using Ajax function and modal
+def login_popup(request):
+    context_dict = {}
+    if request.method == 'POST':
+        # Request and validated username/password.
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return JsonResponse({'login': True})
+            else:
+                context_dict['error'] = "Account is no longer active"
+                return JsonResponse({'login': False,
+                                        'error': context_dict['error']})
+        else:
+            context_dict['error'] = "Username and password do not match. Please try again."
+            print("Invalid:{0},{1}".format(username,password))
+            return JsonResponse({'login': False,
+                                        'error': context_dict['error']})
+    else:
+        context_dict['action'] = 'login'
+        return render(request,'agileSPM/index.html', context=context_dict)
+
+# User logout ability
+@login_required()
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
+
+# Registration form completion and save to database
+def register(request):
+    registered = False # Initially set to false because registration is not completed.
+
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
+
+        # Saves user and profile input to database.
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False) # only commit when the whole form is completed.
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+                profile.save()
+                registered = True # Sets registration to true at this point.
+        else:
+            print(user_form.errors, profile_form.errors) # prints errors to terminal for testing/QA
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render(request, 'agileSPM/register.html', {'user_form' : user_form,
+                                                       'profile_form' : profile_form,
+                                                       'registered' : registered, })    
 
 # Form view 
 def input_doc(request):
@@ -100,7 +186,7 @@ class Kanban_Sow_Wizard(SessionWizardView):
         return render(self.request,'agileSPM/wizard/done.html',{
             'form_data': [form.cleaned_data for form in form_list]
         })
-        # return HttpResponseRedirect('/agileSPM/')
+       
 
 # Scrumban specific form view
 class Scrumban_Sow_Wizard(SessionWizardView):
@@ -119,12 +205,7 @@ class Scrumban_Sow_Wizard(SessionWizardView):
         return render(self.request,'agileSPM/wizard/done.html',{
             'form_data': [form.cleaned_data for form in form_list]
         })
-        # return HttpResponseRedirect('/agileSPM/')
-
-# User account view 
-def my_docs(request):
-    context_dict = {'message5' : "docs check"}
-    return render(request, 'agileSPM/docs.html', context=context_dict)
+        
 
 # Scrum Document creation using docx-Python API
 def scrum_doc(request):
