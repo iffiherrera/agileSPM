@@ -3,92 +3,46 @@ from agileSPM.models import SOW, Scrum, Kanban, Scrumban
 import datetime
 
 ## Statement of Work models are divided into smaller forms as each form 
-# sits on an individual page. ## 
+# sits on an individual page. The use the formstools wizard to combine.## 
+
+### CHECK OUT MODEL FORM SETS FOR MILESTONES AND INVOICES #######
 
 class CoverForm1(forms.Form):
     title = forms.CharField(widget=forms.Textarea)
     produced_by = forms.CharField(max_length=128, widget=forms.TextInput)
     date_project = forms.DateField(widget=forms.SelectDateWidget)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-    slug = forms.SlugField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = SOW
-    #     exclude = ('intro','deliverables','assumptions','milestone_description','date_signature1','date_signature2',
-    #                 'inScope','outScope','backlog','milestones','delivery','invoice_info',
-    #                 'invoice','amount','firstName','secondName','firstSignature','secondSignature')
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
+    # slug = forms.SlugField(widget=forms.HiddenInput())
 
 class IntroForm2(forms.Form):
     intro = forms.CharField(widget=forms.Textarea)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = SOW
-    #     exclude = ('slug','deliverables','assumptions','milestone_description',
-    #                 'inScope','outScope','backlog','milestones','delivery','invoice_info',
-    #                 'invoice','amount','firstName','secondName','firstSignature','secondSignature',
-    #                 'title','produced_by','date_project','date_signature1','date_signature2')
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class ObjectivesForm3(forms.Form):
     deliverables = forms.CharField(widget=forms.Textarea)
     assumptions = forms.CharField(widget=forms.Textarea)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = SOW
-    #     exclude = ('slug','intro','milestone_description', 'invoice_info',
-    #                 'inScope','outScope','backlog','milestones','delivery',
-    #                 'invoice','amount','firstName','secondName','firstSignature','secondSignature',
-    #                 'title','produced_by','date_project','date_signature1','date_signature2')
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class ScopeForm4(forms.Form):
     inScope = forms.CharField(widget=forms.Textarea)
     outScope = forms.CharField(widget=forms.Textarea)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = SOW
-    #     exclude = ('slug','deliverables','assumptions','milestone_description',
-    #                 'intro','backlog','milestones','delivery','invoice_info',
-    #                 'invoice','amount','firstName','secondName','firstSignature','secondSignature',
-    #                 'title','produced_by','date_project','date_signature1','date_signature2')
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class BacklogForm5(forms.Form):
      backlog = forms.CharField(widget=forms.Textarea)
-     updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    #  class Meta:
-    #      model = SOW
-    #      exclude = ('slug','deliverables','assumptions','milestone_description',
-    #                 'inScope','outScope','intro','milestones','delivery', 'invoice_info',
-    #                 'invoice','amount','firstName','secondName','firstSignature','secondSignature',
-    #                 'title','produced_by','date_project','date_signature1','date_signature2')
+    #  updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class MilestonesForm7(forms.Form):
     milestones = forms.DateField(widget=forms.SelectDateWidget) 
     milestone_description = forms.CharField(widget=forms.Textarea) 
     delivery = forms.DateField(widget=forms.SelectDateWidget)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = SOW
-    #     exclude = ('slug','deliverables','assumptions', 'invoice_info'
-    #                 'inScope','outScope','intro', 'backlog',
-    #                 'invoice','amount','firstName','secondName','firstSignature','secondSignature',
-    #                 'title','produced_by','date_project','date_signature1','date_signature2')
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class CostForm8(forms.Form):
     invoice = forms.DateField(widget=forms.SelectDateWidget)
     invoice_info = forms.CharField(max_length=128, widget=forms.TextInput)
     amount = forms.FloatField(widget=forms.TextInput)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = SOW
-    #     exclude = ('slug','deliverables','assumptions','milestone_description',
-    #                 'inScope','outScope','intro','milestones','delivery', 
-    #                 'firstName','secondName','firstSignature','secondSignature',
-    #                 'title','produced_by','date_project','date_signature1','date_signature2')
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class AcceptanceForm9(forms.Form):
     firstName = forms.CharField(widget=forms.Textarea)
@@ -97,14 +51,7 @@ class AcceptanceForm9(forms.Form):
     secondName = forms.CharField(widget=forms.Textarea)
     secondSignature = forms.CharField(widget=forms.Textarea)
     date_signature2 = forms.DateField(widget=forms.SelectDateWidget)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = SOW
-    #     exclude = ('slug','deliverables','assumptions','milestone_description',
-    #                 'inScope','outScope','intro','milestones','delivery', 'invoice_info',
-    #                 'invoice','amount','title','produced_by')
-                    
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())                    
 
 class ScrumForm6(forms.Form):
     sprintLength = forms.IntegerField(widget=forms.TextInput)
@@ -113,11 +60,7 @@ class ScrumForm6(forms.Form):
     team = forms.CharField(widget=forms.Textarea)
     done = forms.CharField(widget=forms.Textarea)
     review = forms.CharField(widget=forms.Textarea)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = Scrum
-    #     exclude = ('title',)
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class KanbanForm6(forms.Form):
     plan = forms.CharField(widget=forms.Textarea)
@@ -125,11 +68,7 @@ class KanbanForm6(forms.Form):
     column_labels = forms.CharField(widget=forms.Textarea)
     wipLimit = forms.IntegerField(widget=forms.TextInput)
     delivery = forms.DateField(widget=forms.SelectDateWidget)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = Kanban
-    #     exclude = ('title',)
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())
 
 class ScrumbanForm6(forms.Form):
     plan = forms.CharField(widget=forms.Textarea)
@@ -137,8 +76,4 @@ class ScrumbanForm6(forms.Form):
     team = forms.CharField(widget=forms.Textarea)
     wipLimit = forms.IntegerField(widget=forms.TextInput)
     review = forms.CharField(widget=forms.Textarea)
-    updated = forms.DateTimeField(widget=forms.HiddenInput())
-
-    # class Meta:
-    #     model = Scrumban
-    #     exclude = ('title',)
+    # updated = forms.DateTimeField(widget=forms.HiddenInput())

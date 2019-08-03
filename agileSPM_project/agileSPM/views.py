@@ -2,23 +2,61 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from agileSPM.models import SOW, Scrum, Kanban, Scrumban
-from agileSPM.forms import CoverForm1, IntroForm2, ObjectivesForm3, ScopeForm4, ScrumForm6, KanbanForm6
-from agileSPM.forms import BacklogForm5, MilestonesForm7, CostForm8, AcceptanceForm9, ScrumbanForm6
+from .models import SOW, Scrum, Kanban, Scrumban
+from .forms import CoverForm1, IntroForm2, ObjectivesForm3, ScopeForm4, ScrumForm6, KanbanForm6
+from .forms import BacklogForm5, MilestonesForm7, CostForm8, AcceptanceForm9, ScrumbanForm6
 from formtools.wizard.views import WizardView, SessionWizardView
+
+# from formtools.preview import FormPreview
+
+# Forms for URL mapping.
+SCRUM_FORM = (
+    ("Cover", CoverForm1),
+    ("Intro", IntroForm2),
+    ("Objectives", ObjectivesForm3),
+    ("Scope", ScopeForm4),
+    ("Backlog", BacklogForm5),
+    ("Scrum", ScrumForm6),
+    ("Milestones", MilestonesForm7),
+    ("Cost", CostForm8),
+    ("Acceptance", AcceptanceForm9),
+)
+# Forms for URL mapping.
+KANBAN_FORM = (
+    ("Cover", CoverForm1),
+    ("Intro", IntroForm2),
+    ("Objectives", ObjectivesForm3),
+    ("Scope", ScopeForm4),
+    ("Backlog", BacklogForm5),
+    ("Kanban", KanbanForm6),
+    ("Milestones", MilestonesForm7),
+    ("Cost", CostForm8),
+    ("Acceptance", AcceptanceForm9),
+)
+# Forms for URL mapping.
+SCRUMBAN_FORM = (
+    ("Cover", CoverForm1),
+    ("Intro", IntroForm2),
+    ("Objectives", ObjectivesForm3),
+    ("Scope", ScopeForm4),
+    ("Backlog", BacklogForm5),
+    ("Scrumban", ScrumbanForm6),
+    ("Milestones", MilestonesForm7),
+    ("Cost", CostForm8),
+    ("Acceptance", AcceptanceForm9),
+)
+
 
 # Home view 
 def index(request):  
-    sow = SOW.objects.all()
-    context_dict = {'sow_doc': sow}
-    return render(request, 'agileSPM/index.html', context_dict)
+    return render(request, 'agileSPM/index.html')
 
 # Form view 
 def input_doc(request):
-    form1 =  CoverForm()
+    form1 =  CoverForm1()
 
     if request.method == 'POST':
-        form1 = CoverForm(request.POST)
+        form1 = CoverForm1(request.POST)
 
         if form1.is_valid():
             form1.save(commit=True)
@@ -28,28 +66,60 @@ def input_doc(request):
             print(form1.errors)
     return render(request, 'agileSPM/index.html', {'form': form1})
 
-# Form wizard view
-# class WizardView(request):
-#     WizardView.done(form_list, form_dict, **kwargs)
+# Scrum specific form view
+class Scrum_Sow_Wizard(SessionWizardView):
+    template_name = "agileSPM/wizard/scrum_sow_template.html"
+    form_list = [SCRUM_FORM]
+    # Restores information from session to session.
+    def get(self, request, *args, **kwargs):
+        try:
+            return self.render(self.get_form())
+        except KeyError: 
+            return super().get(request,*args,**kwargs)
 
-# class SowWizard(SessionWizardView):
-#     def done(self, form_list, **kwargs):
-#         #Something it does here.
-#         return HttpResponseRedirect('/agileSPM/')
+    # Processes the whole document once it's completed.
+    def done(self, form_list, **kwargs):
+        return render(self.request, 'agileSPM/wizard/done.html',{
+            'form_data': [form.cleaned_data for form in form_list],
+        })
 
-# Scrum view
-def sow_scrum(request):
-    return render(request, 'agileSPM/scrum.html')
+# Kanban specific form view
+class Kanban_Sow_Wizard(SessionWizardView):
+    template_name = "agileSPM/wizard/kanban_sow_template.html"
+    form_list = [KANBAN_FORM]
+    
+    # Restores information from session to session.
+    def get(self, request, *args, **kwargs):
+        try:
+            return self.render(self.get_form())
+        except KeyError: 
+            return super().get(request,*args,**kwargs)
 
-# Kanban view
-def sow_kanban(request):
-    context_dict = {'message3' : "kanban check"}
-    return render(request, 'agileSPM/kanban.html', context=context_dict)
+    # Processes the whole document once it's completed.
+    def done(self, form_list, **kwargs):
+        return render(self.request,'agileSPM/wizard/done.html',{
+            'form_data': [form.cleaned_data for form in form_list]
+        })
+        # return HttpResponseRedirect('/agileSPM/')
 
-# Scrumban view
-def sow_scrumban(request):
-    context_dict = {'message4' : "scrumban check"}
-    return render(request, 'agileSPM/scrumban.html', context=context_dict)
+# Scrumban specific form view
+class Scrumban_Sow_Wizard(SessionWizardView):
+    template_name = "agileSPM/wizard/scrumban_sow_template.html"
+    form_list = [SCRUMBAN_FORM]
+    
+    # Restores information from session to session.
+    def get(self, request, *args, **kwargs):
+        try:
+            return self.render(self.get_form())
+        except KeyError: 
+            return super().get(request,*args,**kwargs)
+
+    # Processes the whole document once it's completed.
+    def done(self, form_list, **kwargs):
+        return render(self.request,'agileSPM/wizard/done.html',{
+            'form_data': [form.cleaned_data for form in form_list]
+        })
+        # return HttpResponseRedirect('/agileSPM/')
 
 # User account view 
 def my_docs(request):

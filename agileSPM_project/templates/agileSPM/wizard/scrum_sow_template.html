@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load i18n %}
+<html>
+    <head>
+        <title>AgileSPM - Scrum Statement of Work</title>
+    </head>
+{% block content %}
+<p> Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{wizard.form.media }}
+    {{ wizard.management_form }} <!--Django formtools specific form attribute needed for the wizard to-->
+    {% if wizard.form.forms %}
+        {{ wizard.form.management_form }}
+        {% for form in wizard.form.forms %}
+            {{ form.as_p }}
+        {% endfor %}
+    {% else %}
+        {{ wizard.form.as_p }}
+    {% endif %}
+    
+    {% if wizard.steps.prev %}
+    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first}}">{% trans "first step" %}</button>
+    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev}}">{% trans "prev step" %}</button>
+    {% endif %}
+    <input type="submit" value="{% trans "submit" %}" />
+</form>
+{% endblock %}
+</html>

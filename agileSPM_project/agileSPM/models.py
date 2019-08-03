@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 import datetime
 from django.template.defaultfilters import slugify
 
@@ -70,7 +71,65 @@ class Scrumban(models.Model):
     review = models.TextField(blank=True)
     updated = models.DateTimeField('Last updated', default=datetime.date.today)
 
+## Model forms set for the forms.py user input ##
+class CoverFrom1(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['title','produced_by','date_project','updated','slug',]
 
+class IntroForm2(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['intro','updated']
+
+class ObjectivesForm3(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['deliverables','assumptions','updated',]
+
+class ScopeForm4(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['inScope','outScope','updated',]
+
+class BacklogForm5(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['backlog','updated',]
+
+class ScrumForm6(ModelForm):
+    class Meta: 
+        model = Scrum
+        fields = ['sprintPlan','sprintLength','sprint','team','done','review','updated',]
+        exclude = ['title',]
+
+class KanbanForm6(ModelForm):
+    class Meta:
+        model = Kanban
+        fields = ['plan','columns','column_labels','wipLimit','delivery','updated',]
+        exclude = ['title',]
+
+class ScrumbanFrom6(ModelForm):
+    class Meta:
+        model = Scrumban
+        fields = ['plan','iterations','team','wipLimit','review','updated',]
+        exclude = ['title',]
+
+class MilestonesForm7(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['milestones','milestone_description','delivery','updated',]
+
+class CostForm8(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['invoice','invoice_info','amount','updated']
+
+class AcceptanceForm9(ModelForm):
+    class Meta:
+        model = SOW
+        fields = ['firstName','firstSignature','date_signature1',
+                    'secondName','secondSignature','date_signature2','updated',]
 
 
 
