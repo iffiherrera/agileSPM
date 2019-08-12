@@ -78,7 +78,7 @@ def my_docs(request):
 def login_popup(request):
     context_dict = {}
     if request.method == 'POST':
-        # Request and validated username/password.
+        # Request and validate username/password.
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)

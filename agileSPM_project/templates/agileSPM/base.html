@@ -1,24 +1,71 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+<html lang="en"></html>
 <html>
-    <head lang="en">
-        <meta charset="UTF-8" />
-        <title>agileSPM - 
-            {% block title_block %}
-            Create Dynamic Statements of Work 
-            {% endblock %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <head>
+  
+        <title>
+        AgileSPM - 
+        {% block title_block %}
+            
+        {% endblock %}
         </title>
+    <!-- Imported libraries/stylesheets -->
+
+    {% block import_block %}
+    <link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+    <script src="{% static "js/index.js" %}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+    {% endblock %}
     </head>
     <body>
+        <!-- Navigation bar -->
+        <div class="navbar">
+                <a href="#home">Login</a>
+                <a href="#signup">Sign up</a>
+                <a href="#contact">Contact</a>
+                <div class="dropdown">
+                  <button class="dropbtn">Statement of Work</button>
+                  <div class="dropdown-content">
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                  </div>
+                </div> 
+              </div>
         <div>
             {% block body_block %}
-           
+<!-- Page specific content goes here -->
             {% endblock %}
         </div>
     <div>
-        <hr/>
-        <!-- footer -->
-        <a href="{% url 'sow_scrum'%}">Scrum Form</a>
+     <!-- Footer -->
+                  <div class="footer">
+                    <div class="contain">
+                    <div class="col">
+                      <h1>AgileSPM</h1>
+                      <ul>
+                        <li class="home-btn" data-link="{% url "index" %}">Home</li>
+                        <li class="home-btn" data-link="{% url "index" %}">My Docs</li>
+                        <li class="home-btn" data-link="{% url "index" %}">SOW</li>
+                        <li class="home-btn" data-link="{% url "index" %}">Contact</li>
+                        <li class="home-btn" data-link="{% url "index" %}">Logout</li>
+                      </ul>
+                    </div>
+                    <div class="col">
+                      <h1>Documents</h1>
+                      <ul>
+                        <li class="home-btn" data-link="{% url "index" %}">Scrum</li>
+                        <li class="home-btn" data-link="{% url "index" %}">Kanban</li>
+                        <li class="home-btn" data-link="{% url "index" %}">Scrumban</li>
+
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- end of footer -->
+       
     </div>
     </body>
 </html>

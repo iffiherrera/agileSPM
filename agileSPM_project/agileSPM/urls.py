@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from agileSPM import views
-from agileSPM.views import Scrum_Sow_Wizard, Kanban_Sow_Wizard, Scrumban_Sow_Wizard
+# from agileSPM.views import Scrum_Sow_Wizard, Kanban_Sow_Wizard, Scrumban_Sow_Wizard
 from .views import SCRUM_FORM, Scrum_Sow_Wizard, Kanban_Sow_Wizard, Scrumban_Sow_Wizard
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
@@ -10,7 +10,9 @@ from .forms import KanbanForm6, ScrumbanForm6, MilestonesForm7, CostForm8, Accep
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    # User account
     url(r'^my_docs/', views.my_docs, name='my_docs'),
+    # Registration
     url(r'^register/$', views.register, name='register'),
     # Scrum form view
     url(r'^sow_scrum/$',Scrum_Sow_Wizard.as_view([CoverForm1,IntroForm2,ObjectivesForm3,ScopeForm4,BacklogForm5,

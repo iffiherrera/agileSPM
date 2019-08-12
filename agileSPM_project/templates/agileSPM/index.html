@@ -1,26 +1,26 @@
-<!DOCTYPE html>
+
 {% extends 'agileSPM/base.html' %}
 {% load staticfiles %}
 
-<html lang="en"></html>
+{% block title_block %}
+    Create Dynamic Statements of Work 
+{% endblock %}
 
-<html>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
-        
-    <head>
-        <!-- Imported CSS stylesheets & JavaScript-->
-        <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" />
-        <script src="{% static "js/index.js" %}"></script>
-    </head>
+{% block import_block %}
+    <link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+    <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 
-    <body>
-        <!-- Menu/Navigation bar-->
-        <a href="/agileSPM/scrum_doc/">Download Scrum document</a>
-        
-        <div>
+{% block body_block %}
 
+    <div class="intro">
+        <div class="container">
+            <h1>Testing text here </h1>
         </div>
+    </div>
 
-        </body>
-</html>
+{% endblock %}
+
+{% block end_block %}
+    <script src="{% static "js/index.js" %}"></script>
+{% endblock %}
