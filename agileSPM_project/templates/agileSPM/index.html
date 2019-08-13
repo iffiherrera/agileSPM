@@ -1,26 +1,84 @@
-
+<!DOCTYPE html>
 {% extends 'agileSPM/base.html' %}
 {% load staticfiles %}
 
-{% block title_block %}
-    Create Dynamic Statements of Work 
-{% endblock %}
+<html>
+        {% block title_block %}
+            Create Dynamic Statements of Work
+        {% endblock %}
 
 {% block import_block %}
-    <link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
-    <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" />
+<link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+<link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
+<body>
 {% block body_block %}
+        <div class="blockIntro">
+  
+                    <h1><span>AgileSPM</span></h1><br />
+                    <h2><span>Quick & Easy Statements of work.
+                    </span></h2>
+                    <br/> 
+                    <button id="indexBtn">Get started</button>
+                </div>
 
-    <div class="intro">
-        <div class="container">
-            <h1>Testing text here </h1>
+        <div class="blockOne">
+                <div id="index-sow">
+                        <div class="item">
+                          <img src="/static/images/intro.jpg" alt="scrum"/>
+                          <p>My Caption here</p>
+                        </div>
+                      
+                        <div class="item">
+                          <img src="/static/images/intro.jpg" alt="kanban"/>
+                          <p>My Caption here</p>
+                        </div>
+                      
+                        <div class="item">
+                          <img src="/static/images/intro.jpg" alt="scrumban"/>
+                          <p>My Caption here</p>
+                        </div>
+                      </div>
         </div>
-    </div>
-
+        <div class="break1 container-fluid text-center">
+ 
+                        </div>
 {% endblock %}
 
-{% block end_block %}
-    <script src="{% static "js/index.js" %}"></script>
-{% endblock %}
+<script>
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+
+// Change style of navbar on scroll
+window.onscroll = function() {myFunction()};
+function myFunction() {
+    var navbar = document.getElementById("myNavbar");
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
+    } else {
+        navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
+    }
+}
+
+// Used to toggle the menu on small screens when clicking on the menu button
+function toggleFunction() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+</script> 
+
+</body>
+</html>
+

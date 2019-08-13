@@ -1,11 +1,30 @@
 <!DOCTYPE html>
+{% extends 'agileSPM/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 <html>
-    <head>
-        <title>AgileSPM - Scrum Statement of Work</title>
-    </head>
-{% block content %}
+    {% block title_block %}
+        Scrum Project
+    {% endblock %}
+
+    {% block import_block %}
+    <link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+    <link href="{% static "css/sow.css" %}" rel="stylesheet" type="text/css" />
+    {% endblock %}
+
+{% block body_block %}
+<body>
+<div class="sidebar">
+        <a class="active" href="#cover">Cover Information</a>
+        <a href="#introDoc">Introduction</a>
+        <a href="#">Contact</a>
+        <a href="#about">About</a>
+        <a href="#introDoc">Introduction</a>
+        <a href="#">Contact</a>
+        <a href="#about">About</a>
+      </div>
+
+<div class="formBox">
 <p> Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
@@ -26,5 +45,7 @@
     {% endif %}
     <input type="submit" value="{% trans "submit" %}" />
 </form>
+</div>
+</body>
 {% endblock %}
 </html>
