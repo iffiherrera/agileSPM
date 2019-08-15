@@ -2,9 +2,10 @@ from django.shortcuts import render, reverse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from .models import SOW, Scrum, Kanban, Scrumban
-from .forms import CoverForm1, IntroForm2, ObjectivesForm3, ScopeForm4, ScrumForm6, KanbanForm6
-from .forms import BacklogForm5, MilestonesForm7, CostForm8, AcceptanceForm9, ScrumbanForm6, UserForm, UserProfileForm
+from .models import SOWScrum, SOWKanban, SOWScrumban
+from .forms import CoverScrum1, IntroScrum2, ObjectivesScrum3, ScopeScrum4, ScrumForm6, BacklogScrum5, MilestonesScrum7, CostScrum8, AcceptanceScrum9, UserForm, UserProfileForm
+from .forms import CoverKanban1, IntroKanban2, ObjectivesKanban3, ScopeKanban4, BacklogKanban5, KanbanForm6, MilestonesKanban7, CostKanban8, AcceptanceKanban9
+from .forms import CoverScrumban1, IntroScrumban2, ObjectivesScrumban3, ScopeScrumban4, BacklogScrumban5, ScrumbanForm6, MilestonesScrumban7, CostScrumban8, AcceptanceScrumban9
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,42 +14,29 @@ from django.contrib.auth.decorators import login_required
 # from formtools.preview import FormPreview
 
 # Forms for URL mapping.
-SCRUM_FORM = (
-    ("Cover", CoverForm1),
-    ("Intro", IntroForm2),
-    ("Objectives", ObjectivesForm3),
-    ("Scope", ScopeForm4),
-    ("Backlog", BacklogForm5),
-    ("Scrum", ScrumForm6),
-    ("Milestones", MilestonesForm7),
-    ("Cost", CostForm8),
-    ("Acceptance", AcceptanceForm9),
-)
-# Forms for URL mapping.
 KANBAN_FORM = (
-    ("Cover", CoverForm1),
-    ("Intro", IntroForm2),
-    ("Objectives", ObjectivesForm3),
-    ("Scope", ScopeForm4),
-    ("Backlog", BacklogForm5),
+    ("Cover", CoverKanban1),
+    ("Intro", IntroKanban2),
+    ("Objectives", ObjectivesKanban3),
+    ("Scope", ScopeKanban4),
+    ("Backlog", BacklogKanban5),
     ("Kanban", KanbanForm6),
-    ("Milestones", MilestonesForm7),
-    ("Cost", CostForm8),
-    ("Acceptance", AcceptanceForm9),
+    ("Milestones", MilestonesKanban7),
+    ("Cost", CostKanban8),
+    ("Acceptance", AcceptanceKanban9),
 )
 # Forms for URL mapping.
 SCRUMBAN_FORM = (
-    ("Cover", CoverForm1),
-    ("Intro", IntroForm2),
-    ("Objectives", ObjectivesForm3),
-    ("Scope", ScopeForm4),
-    ("Backlog", BacklogForm5),
+    ("Cover", CoverScrumban1),
+    ("Intro", IntroScrumban2),
+    ("Objectives", ObjectivesScrumban3),
+    ("Scope", ScopeScrumban4),
+    ("Backlog", BacklogScrumban5),
     ("Scrumban", ScrumbanForm6),
-    ("Milestones", MilestonesForm7),
-    ("Cost", CostForm8),
-    ("Acceptance", AcceptanceForm9),
+    ("Milestones", MilestonesScrumban7),
+    ("Cost", CostScrumban8),
+    ("Acceptance", AcceptanceScrumban9),
 )
-
 
 # Home view 
 def index(request):
@@ -138,24 +126,29 @@ def register(request):
                                                        'registered' : registered, })    
 
 # Form view 
-def input_doc(request):
-    form1 =  CoverForm1()
+# def input_doc(request):
+#     form1 =  CoverForm1()
 
-    if request.method == 'POST':
-        form1 = CoverForm1(request.POST)
+#     if request.method == 'POST':
+#         form1 = CoverForm1(request.POST)
 
-        if form1.is_valid():
-            form1.save(commit=True)
-            return index(request)
+#         if form1.is_valid():
+#             form1.save(commit=True)
+#             return index(request)
 
-        else:
-            print(form1.errors)
-    return render(request, 'agileSPM/index.html', {'form': form1})
+#         else:
+#             print(form1.errors)
+#     return render(request, 'agileSPM/index.html', {'form': form1})
 
 # Scrum specific form view
 class Scrum_Sow_Wizard(SessionWizardView):
     template_name = "agileSPM/wizard/scrum_sow_template.html"
-    form_list = [SCRUM_FORM]
+    model = SOWScrum
+    form_list= [CoverScrum1,IntroScrum2,ObjectivesScrum3,ScopeScrum4,
+                BacklogScrum5,ScrumForm6,MilestonesScrum7,
+                CostScrum8,AcceptanceScrum9]
+    print(form_list)
+    
     # Restores information from session to session.
     def get(self, request, *args, **kwargs):
         try:
@@ -165,9 +158,45 @@ class Scrum_Sow_Wizard(SessionWizardView):
 
     # Processes the whole document once it's completed.
     def done(self, form_list, **kwargs):
+        
+        form_data = [form.cleaned_data for form in form_list]
+        
+        # Objects created from the user's input to populate document.
+        title_scrum = form_data[0]['title']
+        produced_scrum = form_data[0]['produced_by']
+        date_scrum = form_data[0]['date_project']
+        intro_scrum = form_data[1]['intro']
+        deliverables_scrum = form_data[2]['deliverables']
+        assumptions_scrum = form_data[2]['assumptions']
+        scopeIn_scrum = form_data[3]['inScope']
+        scopeOut_scrum = form_data[3]['outScope']
+        backlog_scrum = form_data[4]['backlog']
+        sprint_length_scrum = form_data[5]['sprintLength']
+        sprint_scrum = form_data[5]['sprint']
+        sprint_plan_scrum = form_data[5]['sprintPlan']
+        team_scrum = form_data[5]['team']
+        done_scrum = form_data[5]['done']
+        review_scrum = form_data[5]['review']
+        milestones_scrum = form_data[6]['milestones']
+        milestone_description_scrum = form_data[6]['milestone_description']
+        delivery_scrum = form_data[6]['delivery']
+        invoice_scrum = form_data[7]['invoice']
+        invoice_info_scrum = form_data[7]['invoice_info']
+        invoice_amount_scrum = form_data[7]['amount']
+        firstName_scrum = form_data[8]['firstName']
+        firstSignature_scrum = form_data[8]['firstSignature']
+        date_signature1_scrum = form_data[8]['date_signature1']
+        secondName_scrum = form_data[8]['secondName']
+        secondSignature_scrum = form_data[8]['secondSignature']
+        date_signature2 = form_data[8]['date_signature2']
+
+        dictionary = SOWScrum(**form_data)
+        dictionary.save()
+
+        print('output', dictionary)
+
         return render(self.request, 'agileSPM/wizard/done.html',{
-            'form_data': [form.cleaned_data for form in form_list],
-        })
+            'form_data': form_data,})
 
 # Kanban specific form view
 class Kanban_Sow_Wizard(SessionWizardView):
@@ -221,11 +250,12 @@ def scrum_doc(request):
     body_text_style = s_project.styles['Body Text']
     list_bullet_style = s_project.styles['List Bullet']
     numbered_bullet_style = s_project.styles['ListNumber']
+    # title_scrum = form_data[0]['title']
 
 ## Cover page ##
 
     # Title
-    s_project.add_heading('Scrum Project', 0)
+    s_project.add_heading('title_scrum', 0)
     # Produced by 
     s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
     # Date created
@@ -338,6 +368,8 @@ def scrum_doc(request):
     response['Content-Disposition'] = 'attachment; filename=ScrumProject.docx'
     s_project.save(response)
     return response
+
+    return render(request, {'form data' : form_data})
 
 # Kanban Document creation using docx-Python API
 def kanban_doc(request):

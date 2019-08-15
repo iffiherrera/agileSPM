@@ -4,8 +4,8 @@
     padding: 0;
     width: 200px;
     background-color: #f1f1f1;
-    position: fixed;
-    height: 100%;
+    position: absolute;
+    height: 682px;
     overflow: auto;
   }
   
@@ -15,22 +15,24 @@
     padding: 16px;
     text-decoration: none;
   }
-   
+/*    
   .sidebar a.active {
     background-color: #4CAF50;
     color: white;
-  }
+  } */
   
   .sidebar a:hover:not(.active) {
-    background-color: #555;
+    background-color: #f45386;
     color: white;
   }
   
   div.formBox {
     margin-left: 200px;
     padding: 1px 16px;
-    height: 1000px;
+    height: 680px;
+    background-color: #fafafa;
   }
+
   
   @media screen and (max-width: 700px) {
     .sidebar {
@@ -47,4 +49,48 @@
       text-align: center;
       float: none;
     }
+  }
+
+  /* Form specific CSS */
+input[type=text], select, textarea {
+    width: 100%; 
+    padding: 12px; 
+    border: none;
+    box-sizing: border-box; 
+    margin-top: 6px; 
+    margin-bottom: 16px; 
+    resize: vertical;
+  }
+  
+  /* Submit button */
+  input[type=submit] {
+    background-color: #f45386;
+    color: white;
+    font-size: 18px;
+    padding: 20px 50px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }  
+  /* Submit button hover*/
+  input[type=submit]:hover {
+    background-color: #d13365;
+  }
+  #backTop {
+    background-color: #f45386;
+    color: white;
+    font-size: 18px;
+    padding: 20px 50px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #backPrev {
+    background-color: #f45386;
+    color: white;
+    font-size: 18px;
+    padding: 20px 50px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
   }

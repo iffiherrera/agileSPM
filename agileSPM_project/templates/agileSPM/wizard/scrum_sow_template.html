@@ -15,21 +15,22 @@
 {% block body_block %}
 <body>
 <div class="sidebar">
-        <a class="active" href="#cover">Cover Information</a>
-        <a href="#introDoc">Introduction</a>
-        <a href="#">Contact</a>
-        <a href="#about">About</a>
-        <a href="#introDoc">Introduction</a>
-        <a href="#">Contact</a>
-        <a href="#about">About</a>
+        <a href="{{ wizard.steps.first}}" onclick="">Cover Information</a>
+        <a href="{{ wizard.steps.second}}">Introduction</a>
+        <a href="{{ wizard.steps.third}}">Ojectives</a>
+        <a href="{{ wizard.steps.fourth}}">Scope</a>
+        <a href="{{ wizard.steps.fifth}}">Tasks</a>
+        <a href="{{ wizard.steps.sixth}}">Scrum delivery</a>
+        <a href="{{ wizard.steps.seventh}">Timescales</a>
+        <a href="{{ wizard.steps.eigth}}">Project Cost</a>
+        <a href="{{ wizard.steps.ninth}}">Acceptance</a>
       </div>
 
 <div class="formBox">
-<p> Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{wizard.form.media }}
-    {{ wizard.management_form }} <!--Django formtools specific form attribute needed for the wizard to-->
+    {{ wizard.management_form }} <!--Django formtools specific form attribute needed for the wizard to work-->
     {% if wizard.form.forms %}
         {{ wizard.form.management_form }}
         {% for form in wizard.form.forms %}
@@ -38,12 +39,16 @@
     {% else %}
         {{ wizard.form.as_p }}
     {% endif %}
-    
+    <p> Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }} Completed</p>
+
     {% if wizard.steps.prev %}
-    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first}}">{% trans "first step" %}</button>
-    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev}}">{% trans "prev step" %}</button>
+    <!-- <button id="#backTop" type="submit" value="{{ wizard.steps.first}}">{% trans "first step" %}</button> -->
+    <button id="#backPrev" type="submit" value="{{ wizard.steps.prev}}">{% trans "BACK" %}</button>
+    <!-- <input type="submit" value="{{ wizard.steps.first}}">{% trans "first step" %} />
+    <input type="submit" value="{{ wizard.steps.prev}}">{% trans "prev step" %} /> -->
     {% endif %}
-    <input type="submit" value="{% trans "submit" %}" />
+    <input type="submit" value="{% trans "SAVE" %}" />
+    <input type="submit" value="{% trans "NEXT" %}" />
 </form>
 </div>
 </body>

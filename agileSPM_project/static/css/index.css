@@ -127,13 +127,13 @@
 
 .blockIntro h2 { 
   position: absolute; 
-  top: 400px; 
+  top: 370px; 
   left: 0; 
   width: 100%; 
 }
 .blockIntro h2 span { 
   color: white; 
-  font: bold 24px/60px Helvetica, Sans-Serif; 
+  font: bold 24px/50px Helvetica, Sans-Serif; 
   letter-spacing: 10px;  
   background: rgba(0, 0, 0, 0.7);
   padding: 10px; 
@@ -141,18 +141,41 @@
 #indexBtn:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
+.blockIntro .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.blockIntro .btn:hover {
+  background-color: black;
+}
 
 /* SECOND BLOCK  */
 .item{
-  width:200px;
-  height: 200px;
+  width:100px;
+  height: 100px;
   text-align:center;
   display:block;
   background-color: transparent;
   border: 1px solid transparent;
   margin-right: 10px;
   margin-bottom: 1px;
-  float:left;
+  float:center;
+}
+.item .img {
+  width: 100px;
+  height: 100px;
+  text-align:center;
 }
 
 #index-sow{
@@ -165,13 +188,27 @@
   }
 }
 
-.blockOne {
+.flex-container {
   display: flex;
-  flex-flow: wrap;
-  height: 500px;
-  width: 100%;
+  flex-flow: row wrap;
   background: #0030cc;
+  height: 400px;
+  width: 100%;
+  
 }
+.flex-item {
+  height:400px;
+  width:50%;
+  background: #fafafa;
+}
+.flex-img {
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  float: right;
+}
+
+
 .blockTwo {
   display: flex;
   display: -webkit-box;
