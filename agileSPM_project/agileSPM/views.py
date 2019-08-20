@@ -1,17 +1,48 @@
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from .models import SOWScrum, SOWKanban, SOWScrumban
-from .forms import CoverScrum1, IntroScrum2, ObjectivesScrum3, ScopeScrum4, ScrumForm6, BacklogScrum5, MilestonesScrum7, CostScrum8, AcceptanceScrum9, UserForm, UserProfileForm
+from .forms import CoverScrum1, IntroScrum2, ObjectivesScrum3, ScopeScrum4, ScrumForm6, BacklogScrum5, MilestonesScrum7, CostScrum8, AcceptanceScrum9 
 from .forms import CoverKanban1, IntroKanban2, ObjectivesKanban3, ScopeKanban4, BacklogKanban5, KanbanForm6, MilestonesKanban7, CostKanban8, AcceptanceKanban9
 from .forms import CoverScrumban1, IntroScrumban2, ObjectivesScrumban3, ScopeScrumban4, BacklogScrumban5, ScrumbanForm6, MilestonesScrumban7, CostScrumban8, AcceptanceScrumban9
+from .forms import SOWForm, UserForm, UserProfileForm
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+import datetime
 
 
-# from formtools.preview import FormPreview
+# Full form 
+def fullForm(request):
+    form = SOWForm()
+
+    if request.method == 'POST':
+        form = SOWForm(data=request.POST)
+
+        if form.is_valid(): 
+            form = form.save(commit=False)
+            
+        
+            # form.datetime.now()   
+            form.save()
+            id = form.id
+            return redirect('success', id=id)
+
+        else:
+            print(form.errors)
+    
+    else:
+        form = SOWForm()
+    
+    return render(request,'agileSPM/full_form.html', {'form' : form})
+
+
+def success(request, id):
+    return render(request,'agileSPM/wizard/done.html', context={'id' : id })
+
+
+
 
 # Forms for URL mapping.
 KANBAN_FORM = (
@@ -141,62 +172,62 @@ def register(request):
 #     return render(request, 'agileSPM/index.html', {'form': form1})
 
 # Scrum specific form view
-class Scrum_Sow_Wizard(SessionWizardView):
-    template_name = "agileSPM/wizard/scrum_sow_template.html"
-    model = SOWScrum
-    form_list= [CoverScrum1,IntroScrum2,ObjectivesScrum3,ScopeScrum4,
-                BacklogScrum5,ScrumForm6,MilestonesScrum7,
-                CostScrum8,AcceptanceScrum9]
-    print(form_list)
+# class Scrum_Sow_Wizard(SessionWizardView):
+#     template_name = "agileSPM/wizard/scrum_sow_template.html"
+#     model = SOWScrum
+#     form_list= [CoverScrum1,IntroScrum2,ObjectivesScrum3,ScopeScrum4,
+#                 BacklogScrum5,ScrumForm6,MilestonesScrum7,
+#                 CostScrum8,AcceptanceScrum9]
+#     print(form_list)
     
-    # Restores information from session to session.
-    def get(self, request, *args, **kwargs):
-        try:
-            return self.render(self.get_form())
-        except KeyError: 
-            return super().get(request,*args,**kwargs)
+#     # Restores information from session to session.
+#     def get(self, request, *args, **kwargs):
+#         try:
+#             return self.render(self.get_form())
+#         except KeyError: 
+#             return super().get(request,*args,**kwargs)
 
-    # Processes the whole document once it's completed.
-    def done(self, form_list, **kwargs):
+#     # Processes the whole document once it's completed.
+#     def done(self, form_list, **kwargs):
         
-        form_data = [form.cleaned_data for form in form_list]
+#         form_data = [form.cleaned_data for form in form_list]
         
-        # Objects created from the user's input to populate document.
-        title_scrum = form_data[0]['title']
-        produced_scrum = form_data[0]['produced_by']
-        date_scrum = form_data[0]['date_project']
-        intro_scrum = form_data[1]['intro']
-        deliverables_scrum = form_data[2]['deliverables']
-        assumptions_scrum = form_data[2]['assumptions']
-        scopeIn_scrum = form_data[3]['inScope']
-        scopeOut_scrum = form_data[3]['outScope']
-        backlog_scrum = form_data[4]['backlog']
-        sprint_length_scrum = form_data[5]['sprintLength']
-        sprint_scrum = form_data[5]['sprint']
-        sprint_plan_scrum = form_data[5]['sprintPlan']
-        team_scrum = form_data[5]['team']
-        done_scrum = form_data[5]['done']
-        review_scrum = form_data[5]['review']
-        milestones_scrum = form_data[6]['milestones']
-        milestone_description_scrum = form_data[6]['milestone_description']
-        delivery_scrum = form_data[6]['delivery']
-        invoice_scrum = form_data[7]['invoice']
-        invoice_info_scrum = form_data[7]['invoice_info']
-        invoice_amount_scrum = form_data[7]['amount']
-        firstName_scrum = form_data[8]['firstName']
-        firstSignature_scrum = form_data[8]['firstSignature']
-        date_signature1_scrum = form_data[8]['date_signature1']
-        secondName_scrum = form_data[8]['secondName']
-        secondSignature_scrum = form_data[8]['secondSignature']
-        date_signature2 = form_data[8]['date_signature2']
+#         # Objects created from the user's input to populate document.
+#         title_scrum = form_data[0]['title']
+#         produced_scrum = form_data[0]['produced_by']
+#         date_scrum = form_data[0]['date_project']
+#         intro_scrum = form_data[1]['intro']
+#         deliverables_scrum = form_data[2]['deliverables']
+#         assumptions_scrum = form_data[2]['assumptions']
+#         scopeIn_scrum = form_data[3]['inScope']
+#         scopeOut_scrum = form_data[3]['outScope']
+#         backlog_scrum = form_data[4]['backlog']
+#         sprint_length_scrum = form_data[5]['sprintLength']
+#         sprint_scrum = form_data[5]['sprint']
+#         sprint_plan_scrum = form_data[5]['sprintPlan']
+#         team_scrum = form_data[5]['team']
+#         done_scrum = form_data[5]['done']
+#         review_scrum = form_data[5]['review']
+#         milestones_scrum = form_data[6]['milestones']
+#         milestone_description_scrum = form_data[6]['milestone_description']
+#         delivery_scrum = form_data[6]['delivery']
+#         invoice_scrum = form_data[7]['invoice']
+#         invoice_info_scrum = form_data[7]['invoice_info']
+#         invoice_amount_scrum = form_data[7]['amount']
+#         firstName_scrum = form_data[8]['firstName']
+#         firstSignature_scrum = form_data[8]['firstSignature']
+#         date_signature1_scrum = form_data[8]['date_signature1']
+#         secondName_scrum = form_data[8]['secondName']
+#         secondSignature_scrum = form_data[8]['secondSignature']
+#         date_signature2 = form_data[8]['date_signature2']
 
-        dictionary = SOWScrum(**form_data)
-        dictionary.save()
+#         dictionary = SOWScrum(**form_data)
+#         dictionary.save()
 
-        print('output', dictionary)
+#         print('output', dictionary)
 
-        return render(self.request, 'agileSPM/wizard/done.html',{
-            'form_data': form_data,})
+#         return render(self.request, 'agileSPM/wizard/done.html',{
+#             'form_data': form_data,})
 
 # Kanban specific form view
 class Kanban_Sow_Wizard(SessionWizardView):
@@ -237,7 +268,9 @@ class Scrumban_Sow_Wizard(SessionWizardView):
         
 
 # Scrum Document creation using docx-Python API
-def scrum_doc(request):
+def scrum_doc(request, id):
+    user_input = SOWScrum.objects.get(id=id)
+    print(user_input.title)
 
 ## Document formatting, rules & styles ##
     s_project = Document()
@@ -245,7 +278,7 @@ def scrum_doc(request):
     paragraph_format = paragraph.paragraph_format
     paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
     paragraph_format.keep_with_next = True
-
+ 
     styles = s_project.styles
     body_text_style = s_project.styles['Body Text']
     list_bullet_style = s_project.styles['List Bullet']
@@ -255,63 +288,64 @@ def scrum_doc(request):
 ## Cover page ##
 
     # Title
-    s_project.add_heading('title_scrum', 0)
+    s_project.add_heading(user_input.title, 0)
+    # print(s_project)
     # Produced by 
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.produced_by, style=body_text_style)
     # Date created
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.date_project, style=body_text_style)
     s_project.add_page_break()
 
 ## Overview ##
 
     # Introduction
     s_project.add_heading('Introduction', level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.intro, style=body_text_style)
 
 ## Objectives ##
 
     # Deliverables 
     s_project.add_heading('Deliverables',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=list_bullet_style)
+    s_project.add_paragraph(user_input.deliverables, style=list_bullet_style)
     # Assumptions
     s_project.add_heading('Assumptions',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=list_bullet_style)
+    s_project.add_paragraph(user_input.assumptions, style=list_bullet_style)
 
 ## Scope ##
 
     # In Scope
     s_project.add_heading('In Scope',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.outScope, style=body_text_style)
     # Out of Scope
     s_project.add_heading('Out of Scope',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.inScope, style=body_text_style)
 
 ## Backlog ##
 
     # Product backlog 
     s_project.add_heading('Product backlog',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=list_bullet_style)
+    s_project.add_paragraph(user_input.backlog, style=list_bullet_style)
 
 ## Mode of Delivery ##
 
     # Sprint plan 
     s_project.add_heading('Sprint Planning',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.sprintPlan, style=body_text_style)
     # Sprints
     para = s_project.add_paragraph('Number of Sprints:')
-    para.add_run('Number goes here').bold = True
+    para.add_run(user_input.sprint).bold = True
     # Sprint Length
     para = s_project.add_paragraph('Length of Sprint:')
-    para.add_run('Number goes here').bold = True
+    para.add_run(user_input.sprintLength).bold = True
     # Team 
     s_project.add_heading('Team Structure',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.team, style=body_text_style)
     # Done
     s_project.add_heading('Defining Done',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.done, style=body_text_style)
     # Review
     s_project.add_heading('Review Opportunities',level=1)
-    s_project.add_paragraph('Lorem ipsum dolor sit amet.', style=body_text_style)
+    s_project.add_paragraph(user_input.review, style=body_text_style)
   
 
 ## Milestones ## 
@@ -323,10 +357,10 @@ def scrum_doc(request):
     header_cells = milestone_table.rows[0].cells
     header_cells[0].text = 'Milestone'
     header_cells[1].text = 'Date'
-    row = milestone_table.add_row() # Method adding a row, to be called! 
+    row = milestone_table.add_row(user_input.milestones) # Method adding a row, to be called! 
     # Delivery
     para = s_project.add_paragraph('Delivery date:')
-    para.add_run('Number goes here').bold = True
+    para.add_run(user_input.delivery).bold = True
 
     for row in milestone_table.rows:
         for cell in row.cells:
@@ -352,17 +386,19 @@ def scrum_doc(request):
 
     # Signature 1
     s_project.add_heading('Acceptance',level=1)
-    s_project.add_paragraph('Full name:', style=body_text_style)
+    para = s_project.add_paragraph('Full Name:')
+    para.add_run(user_input.firstName).bold = True
     s_project.add_paragraph('Signature:', style='IntenseQuote')
     # Date
     para = s_project.add_paragraph('Date signed:')
-    para.add_run('Number goes here')
+    para.add_run(user_input.date_signature1)
     # Signature 2
-    s_project.add_paragraph('Full name:', style=body_text_style)
+    para = s_project.add_paragraph('Full Name:')
+    para.add_run(user_input.secondName).bold = True
     s_project.add_paragraph('Signature:', style='IntenseQuote')
     # Date
     para = s_project.add_paragraph('Date signed:')
-    para.add_run('Number goes here')
+    para.add_run(user_input.date_signature2)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = 'attachment; filename=ScrumProject.docx'

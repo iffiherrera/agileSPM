@@ -5,7 +5,7 @@
     width: 200px;
     background-color: #f1f1f1;
     position: absolute;
-    height: 682px;
+    height: 680px;
     overflow: auto;
   }
   
@@ -28,8 +28,8 @@
   
   div.formBox {
     margin-left: 200px;
-    padding: 1px 16px;
-    height: 680px;
+    padding: 30px 50px;
+    height: auto;
     background-color: #fafafa;
   }
 

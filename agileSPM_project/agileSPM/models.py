@@ -1,12 +1,11 @@
 from django.db import models
 from django.forms import ModelForm
 import datetime
-from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 # User field / Authentication 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete =models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='profile_images',blank=True)
     
     def __str__(self):
@@ -15,6 +14,7 @@ class UserProfile(models.Model):
 
 # Scrum Statement of Work model
 class SOWScrum(models.Model):
+    # author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
@@ -37,23 +37,19 @@ class SOWScrum(models.Model):
     invoice_info = models.CharField(max_length=128, blank=True)
     amount = models.FloatField(default=0,blank=False)
     firstName = models.TextField(blank=True)
-    firstSignature = models.TextField(blank=True)
     date_signature1 = models.DateField(default=datetime.date.today)
     secondName = models.TextField(blank=True)
-    secondSignature = models.TextField(blank=True)
     date_signature2 = models.DateField(default=datetime.date.today)
     updated = models.DateTimeField('Last updated', default=datetime.date.today)
-    slug = models.SlugField(unique=True)
-
+    
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
         super(SOWScrum, self).save(*args, **kwargs)
 
 ## Scrum Model forms set for the forms.py user input ##
 class CoverScrum1(ModelForm):
     class Meta:
         model = SOWScrum
-        fields = ['title','produced_by','date_project','updated','slug',]
+        fields = ['title','produced_by','date_project','updated',]
 
 class IntroScrum2(ModelForm):
     class Meta:
@@ -93,12 +89,13 @@ class CostScrum8(ModelForm):
 class AcceptanceScrum9(ModelForm):
     class Meta:
         model = SOWScrum
-        fields = ['firstName','firstSignature','date_signature1',
-                    'secondName','secondSignature','date_signature2','updated',]
+        fields = ['firstName','date_signature1',
+                    'secondName', 'date_signature2','updated',]
 
 
 # Kanban Statement of Work database fields
 class SOWKanban(models.Model):
+    # author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
@@ -120,23 +117,20 @@ class SOWKanban(models.Model):
     invoice_info = models.CharField(max_length=128, blank=True)
     amount = models.FloatField(default=0,blank=False)
     firstName = models.TextField(blank=True)
-    firstSignature = models.TextField(blank=True)
     date_signature1 = models.DateField(default=datetime.date.today)
     secondName = models.TextField(blank=True)
-    secondSignature = models.TextField(blank=True)
     date_signature2 = models.DateField(default=datetime.date.today)
     updated = models.DateTimeField('Last updated', default=datetime.date.today)
-    slug = models.SlugField(unique=True)
+
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
         super(SOWKanban, self).save(*args, **kwargs)
 
 ## Kanban Model forms set for the forms.py user input ##
 class CoverKanban1(ModelForm):
     class Meta:
         model = SOWKanban
-        fields = ['title','produced_by','date_project','updated','slug',]
+        fields = ['title','produced_by','date_project','updated',]
 
 class IntroKanban2(ModelForm):
     class Meta:
@@ -176,12 +170,13 @@ class CostKanban8(ModelForm):
 class AcceptanceKanban9(ModelForm):
     class Meta:
         model = SOWKanban
-        fields = ['firstName','firstSignature','date_signature1',
-                    'secondName','secondSignature','date_signature2','updated',]
+        fields = ['firstName','date_signature1',
+                    'secondName','date_signature2','updated',]
 
 
 # Scrumban Statement of Work database fields
 class SOWScrumban(models.Model):
+    # author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
@@ -203,16 +198,12 @@ class SOWScrumban(models.Model):
     invoice_info = models.CharField(max_length=128, blank=True)
     amount = models.FloatField(default=0,blank=False)
     firstName = models.TextField(blank=True)
-    firstSignature = models.TextField(blank=True)
     date_signature1 = models.DateField(default=datetime.date.today)
     secondName = models.TextField(blank=True)
-    secondSignature = models.TextField(blank=True)
     date_signature2 = models.DateField(default=datetime.date.today)
     updated = models.DateTimeField('Last updated', default=datetime.date.today)
-    slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
         super(SOWScrumban, self).save(*args, **kwargs)
 
 
@@ -220,7 +211,7 @@ class SOWScrumban(models.Model):
 class CoverScrumban1(ModelForm):
     class Meta:
         model = SOWScrumban
-        fields = ['title','produced_by','date_project','updated','slug',]
+        fields = ['title','produced_by','date_project','updated',]
 
 class IntroScrumban2(ModelForm):
     class Meta:
@@ -260,6 +251,6 @@ class CostScrumban8(ModelForm):
 class AcceptanceScrumban9(ModelForm):
     class Meta:
         model = SOWScrumban
-        fields = ['firstName','firstSignature','date_signature1',
-                    'secondName','secondSignature','date_signature2','updated',]
+        fields = ['firstName','date_signature1',
+                    'secondName','date_signature2','updated',]
 

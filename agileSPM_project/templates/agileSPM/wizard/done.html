@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+{% extends 'agileSPM/base.html' %}
 
 {% block content %}
-
+{% block body_block %}
 <h1>Done</h1>
 
-<a href="/agileSPM/scrum_doc/">Download scrum doc </a>
+<a href="{% url 'scrum_doc' id %}">Download scrum doc </a>
 {%for form in form_data %}
     {{form}}
 {% endfor %}
+{% endblock %}
 {% endblock %}
