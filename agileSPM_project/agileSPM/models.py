@@ -6,15 +6,13 @@ from django.contrib.auth.models import User
 # User field / Authentication 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to='profile_images',blank=True)
     
     def __str__(self):
         return self.user.username
 
-
 # Scrum Statement of Work model
 class SOWScrum(models.Model):
-    # author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
@@ -45,57 +43,9 @@ class SOWScrum(models.Model):
     def save(self, *args, **kwargs):
         super(SOWScrum, self).save(*args, **kwargs)
 
-## Scrum Model forms set for the forms.py user input ##
-class CoverScrum1(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['title','produced_by','date_project','updated',]
-
-class IntroScrum2(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['intro','updated']
-
-class ObjectivesScrum3(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['deliverables','assumptions','updated',]
-
-class ScopeScrum4(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['inScope','outScope','updated',]
-
-class BacklogScrum5(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['backlog','updated',]
-
-class ScrumForm6(ModelForm):
-    class Meta: 
-        model = SOWScrum
-        fields = ['sprintPlan','sprintLength','sprint','team','done','review','updated',]
-
-class MilestonesScrum7(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['milestones','milestone_description','delivery','updated',]
-
-class CostScrum8(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['invoice','invoice_info','amount','updated']
-
-class AcceptanceScrum9(ModelForm):
-    class Meta:
-        model = SOWScrum
-        fields = ['firstName','date_signature1',
-                    'secondName', 'date_signature2','updated',]
-
-
 # Kanban Statement of Work database fields
 class SOWKanban(models.Model):
-    # author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
@@ -126,57 +76,10 @@ class SOWKanban(models.Model):
     def save(self, *args, **kwargs):
         super(SOWKanban, self).save(*args, **kwargs)
 
-## Kanban Model forms set for the forms.py user input ##
-class CoverKanban1(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['title','produced_by','date_project','updated',]
-
-class IntroKanban2(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['intro','updated']
-
-class ObjectivesKanban3(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['deliverables','assumptions','updated',]
-
-class ScopeKanban4(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['inScope','outScope','updated',]
-
-class BacklogKanban5(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['backlog','updated',]
-
-class KanbanForm6(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['plan','columns','column_labels','wipLimit','delivery','updated',]
-      
-class MilestonesKanban7(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['milestones','milestone_description','delivery','updated',]
-
-class CostKanban8(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['invoice','invoice_info','amount','updated']
-
-class AcceptanceKanban9(ModelForm):
-    class Meta:
-        model = SOWKanban
-        fields = ['firstName','date_signature1',
-                    'secondName','date_signature2','updated',]
-
 
 # Scrumban Statement of Work database fields
 class SOWScrumban(models.Model):
-    # author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
@@ -207,50 +110,4 @@ class SOWScrumban(models.Model):
         super(SOWScrumban, self).save(*args, **kwargs)
 
 
-## Scrumban Model forms set for the forms.py user input ##
-class CoverScrumban1(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['title','produced_by','date_project','updated',]
-
-class IntroScrumban2(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['intro','updated']
-
-class ObjectivesScrumban3(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['deliverables','assumptions','updated',]
-
-class ScopeScrumban4(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['inScope','outScope','updated',]
-
-class BacklogScrumban5(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['backlog','updated',]
-
-class ScrumbanFrom6(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['plan','iterations','team','wipLimit','review','updated',]
-       
-class MilestonesScrumban7(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['milestones','milestone_description','delivery','updated',]
-
-class CostScrumban8(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['invoice','invoice_info','amount','updated']
-
-class AcceptanceScrumban9(ModelForm):
-    class Meta:
-        model = SOWScrumban
-        fields = ['firstName','date_signature1',
-                    'secondName','date_signature2','updated',]
 

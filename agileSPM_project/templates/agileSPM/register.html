@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends 'agileSPM/base.html' %}
+{% load staticfiles %}
+
+<html>
+        {% block title_block %}
+            Login
+        {% endblock %}
+
+{% block import_block %}
+<link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+<!-- <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" /> -->
+<link href="{% static "css/login_signup.css" %}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+<body>
+  <div>
+{% block body_block %}
+<div class="modal-signup">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Sign Up</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="forms">
+          {{ user_form.as_p }}
+         <input type="submit" value="Sign up"/>
+         <p>Already a user? <a href="{% url 'login' %} ">Login</a></p>
+        </div>
+      </form>
+            </div>
+          </div>
+        </div>
+{% endblock %}
+</div>
+<div>
+        {% block end_block %}
+        <!-- Jquery goes here -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+        <script src="{% static "js/jquery.js" %}"></script>
+        {% endblock %}
+        </div>
+</body>
+</html>
+

@@ -16,8 +16,8 @@
 
     {% block import_block %}
     <link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
-    <script src="{% static "js/index.js" %}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+   
     {% endblock %}
     </head>
     <body>  
@@ -26,9 +26,9 @@
                 <div class="logo">
                         <img class="logo home-btn" src="{% static "images/agilespmLogo.png" %}"> </div>
                     <div class="navbar"> 
-                            <a href="#home">Login</a>
-                            <a href="#signup">Sign up</a>
-                            <a href="#contact">Contact</a>
+                            <a id="user-login" href="{% url "login" %}">Login</a>
+                            <a id="user-signup" href="{% url "register" %}">Sign Up</a>
+                            <a id="contact" href="#">Contact</a>
                             <div class="dropdown">
                               <button class="dropbtn">Statement of Work</button>
                               <div class="dropdown-content">
@@ -60,9 +60,8 @@
                   <h1>AgileSPM</h1>
                   <ul>
                     <li class="home-btn" data-link="{% url "index" %}">Home</li>
-                    <li class="home-btn" data-link="{% url "index" %}">My Docs</li>
-                    <li class="home-btn" data-link="{% url "index" %}">SOW</li>
-                    <li class="home-btn" data-link="{% url "index" %}">Contact</li>
+                    <li class="docs-btn" data-link="{% url "my_docs" %}">My Docs</li>
+                    <li class="contact-btn" data-link="{% url "index" %}">Contact</li>
                     <li class="home-btn" data-link="{% url "index" %}">Logout</li>
                   </ul>
                 </div>
@@ -83,6 +82,16 @@
 <div>
 {% block end_block %}
 <!-- Jquery goes here -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+<script src="{% static "js/jquery.js" %}"></script>
+{% endblock %}
+</div>
+
+<!-- Modal section login/sign up pop up -->
+<div>
+{% block modal_block %}
+
 {% endblock %}
 </div>
     </body>

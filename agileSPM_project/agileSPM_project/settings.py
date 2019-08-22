@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'agileSPM',
     'formtools',
+    'bootstrap_modal_forms',
 ]
 
 MIDDLEWARE = [

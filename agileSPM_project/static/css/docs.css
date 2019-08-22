@@ -1,0 +1,13 @@
+.doc_page {
+    width: 100%;
+    height: 600px;
+    background-color: #fafafa;
+   
+}
+
+#file {
+    font-size: 150px;
+    color: #f45386;
+    float: center;
+
+}

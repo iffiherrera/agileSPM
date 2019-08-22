@@ -2,23 +2,32 @@ from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from .models import SOWScrum, SOWKanban, SOWScrumban
-from .forms import CoverScrum1, IntroScrum2, ObjectivesScrum3, ScopeScrum4, ScrumForm6, BacklogScrum5, MilestonesScrum7, CostScrum8, AcceptanceScrum9 
-from .forms import CoverKanban1, IntroKanban2, ObjectivesKanban3, ScopeKanban4, BacklogKanban5, KanbanForm6, MilestonesKanban7, CostKanban8, AcceptanceKanban9
-from .forms import CoverScrumban1, IntroScrumban2, ObjectivesScrumban3, ScopeScrumban4, BacklogScrumban5, ScrumbanForm6, MilestonesScrumban7, CostScrumban8, AcceptanceScrumban9
-from .forms import SOWForm, UserForm, UserProfileForm
+from .models import SOWScrum, SOWKanban, SOWScrumban, UserProfile, User
+from .forms import SOWScrumForm, UserForm, EditScrumForm
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 import datetime
+from django.urls import reverse_lazy
+from bootstrap_modal_forms.generic import BSModalCreateView
 
 
-# Full form 
+# Login pop up 
+
+class login_view(BSModalCreateView):
+    template_name = 'agileSPM/register.html'
+    form_class = UserForm
+    success_message = 'Thank you for registering.'
+    success_url = reverse_lazy('index')
+
+
+# Scrum form 
 def fullForm(request):
-    form = SOWForm()
+    form = SOWScrumForm()
 
     if request.method == 'POST':
-        form = SOWForm(data=request.POST)
+        form = SOWScrumForm(data=request.POST)
 
         if form.is_valid(): 
             form = form.save(commit=False)
@@ -33,91 +42,130 @@ def fullForm(request):
             print(form.errors)
     
     else:
-        form = SOWForm()
+        form = SOWScrumForm()
     
     return render(request,'agileSPM/full_form.html', {'form' : form})
 
 
+# Successful completion of form view.
 def success(request, id):
-    return render(request,'agileSPM/wizard/done.html', context={'id' : id })
-
-
-
-
-# Forms for URL mapping.
-KANBAN_FORM = (
-    ("Cover", CoverKanban1),
-    ("Intro", IntroKanban2),
-    ("Objectives", ObjectivesKanban3),
-    ("Scope", ScopeKanban4),
-    ("Backlog", BacklogKanban5),
-    ("Kanban", KanbanForm6),
-    ("Milestones", MilestonesKanban7),
-    ("Cost", CostKanban8),
-    ("Acceptance", AcceptanceKanban9),
-)
-# Forms for URL mapping.
-SCRUMBAN_FORM = (
-    ("Cover", CoverScrumban1),
-    ("Intro", IntroScrumban2),
-    ("Objectives", ObjectivesScrumban3),
-    ("Scope", ScopeScrumban4),
-    ("Backlog", BacklogScrumban5),
-    ("Scrumban", ScrumbanForm6),
-    ("Milestones", MilestonesScrumban7),
-    ("Cost", CostScrumban8),
-    ("Acceptance", AcceptanceScrumban9),
-)
+    context_dict = {'id': id}
+    return render(request,'agileSPM/wizard/done.html', context=context_dict)
 
 # Home view 
 def index(request):
     user_form = UserForm()
-    profile_form = UserProfileForm()
 
     context_dict = {
         'user_form': user_form,
-        'profile_form': profile_form,
     }
     return render(request, 'agileSPM/index.html', context=context_dict)
 
 # User account view 
-@login_required()
+# @login_required()
 def my_docs(request):
-    user_form = UserForm()
-    profile_form = UserProfileForm()
-    profile = UserProfile.objects.filter(user=request.user)[0]
+    context_dict = {'user': request.user,
+                    'id': id }
+   
+    print(request.user)
 
-    context_dict = {'user_form': user_form,
-                    'profile_form': profile_form,
-                    'profile': profile,}
+    return render(request, 'agileSPM/docs.html', context=context_dict)
 
-    return render(request, 'agile/SPM/docs.html', context=context_dict)
+def edit_scrum_form(request,id):
+    scrum_form = SOWScrum.objects.get(id=id)
+    editable_form = EditScrumForm(instance=scrum_form)
 
-# Pop up login/sign up function using Ajax function and modal
-def login_popup(request):
-    context_dict = {}
     if request.method == 'POST':
-        # Request and validate username/password.
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
+        form = EditScrumForm(request.POST)
 
-        if user:
-            if user.is_active:
-                login(request, user)
-                return JsonResponse({'login': True})
-            else:
-                context_dict['error'] = "Account is no longer active"
-                return JsonResponse({'login': False,
-                                        'error': context_dict['error']})
-        else:
-            context_dict['error'] = "Username and password do not match. Please try again."
-            print("Invalid:{0},{1}".format(username,password))
-            return JsonResponse({'login': False,
-                                        'error': context_dict['error']})
-    else:
-        context_dict['action'] = 'login'
-        return render(request,'agileSPM/index.html', context=context_dict)
+        if form.is_valid():
+            # title
+            title_update = form.cleaned_data['title']
+            scrum_form.title = title_update
+            
+            
+            #produced by 
+            produced_update = form.cleaned_data['produced_by']
+            scrum_form.produced_by = produced_update
+            
+
+            # scrum.date_project = form.cleaned_data['date_project']
+            # scrum_form.title = title_update
+            # scrum.intro = form.cleaned_data['intro']
+            # scrum_form.title = title_update
+            # scrum.deliverables = form.cleaned_data['deliverables']
+            # scrum_form.title = title_update
+            # scrum.assumptions = form.cleaned_data['assumptions']
+            # scrum_form.title = title_update
+            # scrum.inScope = form.cleaned_data['inScope']
+            # scrum_form.title = title_update
+            # scrum.outScope = form.cleaned_data['outScope']
+            # scrum_form.title = title_update
+            # scrum.backlog = form.cleaned_data['backlog']
+            # scrum_form.title = title_update
+            # scrum.sprintLength = form.cleaned_data['sprintLength']
+            # scrum_form.title = title_update
+            # scrum.sprint = form.cleaned_data['sprint']
+            # scrum_form.title = title_update
+            # scrum.sprintPlan = form.cleaned_data['sprintPlan']
+            # scrum_form.title = title_update
+            # scrum.team = form.cleaned_data['team']
+            # scrum_form.title = title_update
+            # scrum.done = form.cleaned_data['done']
+            # scrum_form.title = title_update
+            # scrum.review = form.cleaned_data['review']
+            # scrum_form.title = title_update
+            # scrum.milestones = form.cleaned_data['milestones']
+            # scrum_form.title = title_update
+            # scrum.milestone_description = form.cleaned_data['milestone_desription']
+            # scrum_form.title = title_update
+            # scrum.delivery = form.cleaned_data['delivery']
+            # scrum_form.title = title_update
+            # scrum.invoice = form.cleaned_data['invoice']
+            # scrum_form.title = title_update
+            # scrum.invoice_info = form.cleaned_data['invoice_info']
+            # scrum_form.title = title_update
+            # scrum.amount = form.cleaned_data['amount']
+            # scrum_form.title = title_update
+            # scrum.firstName = form.cleaned_data['firstName']
+            # scrum_form.title = title_update
+            # scrum.date_signature1 = form.cleaned_data['date_signature1']
+            # scrum_form.title = title_update
+            # scrum.secondName = form.cleaned_data['secondName']
+            # scrum_form.title = title_update
+            # scrum.date_signature2 = form.cleaned_data['date_signature2']
+            # scrum_form.title = title_update
+
+
+            scrum_form.updated = datetime.now()
+            scrum_form.save()
+
+
+# Pop up login/sign up function using Ajax function and modal, returning a JSON response.
+# def login_popup(request):
+#     context_dict = {}
+#     if request.method == 'POST':
+#         # Request and validate username/password.
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = authenticate(username=username, password=password)
+
+#         if user:
+#             if user.is_active:
+#                 login(request, user)
+#                 return JsonResponse({'login': True})
+#             else:
+#                 context_dict['error'] = "Account is no longer active"
+#                 return JsonResponse({'login': False,
+#                                         'error': context_dict['error']})
+#         else:
+#             context_dict['error'] = "Username and password do not match. Please try again."
+#             print("Invalid:{0},{1}".format(username,password))
+#             return JsonResponse({'login': False,
+#                                         'error': context_dict['error']})
+#     else:
+#         context_dict['action'] = 'login'
+#         return render(request,'agileSPM/index.html', context=context_dict)
 
 # User logout ability
 @login_required()
@@ -131,146 +179,27 @@ def register(request):
 
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
-
+    
         # Saves user and profile input to database.
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+            registered = True # Sets registration to true at this point.
+            return redirect('my_docs')
 
-            profile = profile_form.save(commit=False) # only commit when the whole form is completed.
-            profile.user = user
-
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-                profile.save()
-                registered = True # Sets registration to true at this point.
         else:
-            print(user_form.errors, profile_form.errors) # prints errors to terminal for testing/QA
+            print(user_form.errors) # prints errors to terminal for testing/QA
     else:
         user_form = UserForm()
-        profile_form = UserProfileForm()
-
+    print('succesful', request.user)
     return render(request, 'agileSPM/register.html', {'user_form' : user_form,
-                                                       'profile_form' : profile_form,
-                                                       'registered' : registered, })    
-
-# Form view 
-# def input_doc(request):
-#     form1 =  CoverForm1()
-
-#     if request.method == 'POST':
-#         form1 = CoverForm1(request.POST)
-
-#         if form1.is_valid():
-#             form1.save(commit=True)
-#             return index(request)
-
-#         else:
-#             print(form1.errors)
-#     return render(request, 'agileSPM/index.html', {'form': form1})
-
-# Scrum specific form view
-# class Scrum_Sow_Wizard(SessionWizardView):
-#     template_name = "agileSPM/wizard/scrum_sow_template.html"
-#     model = SOWScrum
-#     form_list= [CoverScrum1,IntroScrum2,ObjectivesScrum3,ScopeScrum4,
-#                 BacklogScrum5,ScrumForm6,MilestonesScrum7,
-#                 CostScrum8,AcceptanceScrum9]
-#     print(form_list)
-    
-#     # Restores information from session to session.
-#     def get(self, request, *args, **kwargs):
-#         try:
-#             return self.render(self.get_form())
-#         except KeyError: 
-#             return super().get(request,*args,**kwargs)
-
-#     # Processes the whole document once it's completed.
-#     def done(self, form_list, **kwargs):
-        
-#         form_data = [form.cleaned_data for form in form_list]
-        
-#         # Objects created from the user's input to populate document.
-#         title_scrum = form_data[0]['title']
-#         produced_scrum = form_data[0]['produced_by']
-#         date_scrum = form_data[0]['date_project']
-#         intro_scrum = form_data[1]['intro']
-#         deliverables_scrum = form_data[2]['deliverables']
-#         assumptions_scrum = form_data[2]['assumptions']
-#         scopeIn_scrum = form_data[3]['inScope']
-#         scopeOut_scrum = form_data[3]['outScope']
-#         backlog_scrum = form_data[4]['backlog']
-#         sprint_length_scrum = form_data[5]['sprintLength']
-#         sprint_scrum = form_data[5]['sprint']
-#         sprint_plan_scrum = form_data[5]['sprintPlan']
-#         team_scrum = form_data[5]['team']
-#         done_scrum = form_data[5]['done']
-#         review_scrum = form_data[5]['review']
-#         milestones_scrum = form_data[6]['milestones']
-#         milestone_description_scrum = form_data[6]['milestone_description']
-#         delivery_scrum = form_data[6]['delivery']
-#         invoice_scrum = form_data[7]['invoice']
-#         invoice_info_scrum = form_data[7]['invoice_info']
-#         invoice_amount_scrum = form_data[7]['amount']
-#         firstName_scrum = form_data[8]['firstName']
-#         firstSignature_scrum = form_data[8]['firstSignature']
-#         date_signature1_scrum = form_data[8]['date_signature1']
-#         secondName_scrum = form_data[8]['secondName']
-#         secondSignature_scrum = form_data[8]['secondSignature']
-#         date_signature2 = form_data[8]['date_signature2']
-
-#         dictionary = SOWScrum(**form_data)
-#         dictionary.save()
-
-#         print('output', dictionary)
-
-#         return render(self.request, 'agileSPM/wizard/done.html',{
-#             'form_data': form_data,})
-
-# Kanban specific form view
-class Kanban_Sow_Wizard(SessionWizardView):
-    template_name = "agileSPM/wizard/kanban_sow_template.html"
-    form_list = [KANBAN_FORM]
-    
-    # Restores information from session to session.
-    def get(self, request, *args, **kwargs):
-        try:
-            return self.render(self.get_form())
-        except KeyError: 
-            return super().get(request,*args,**kwargs)
-
-    # Processes the whole document once it's completed.
-    def done(self, form_list, **kwargs):
-        return render(self.request,'agileSPM/wizard/done.html',{
-            'form_data': [form.cleaned_data for form in form_list]
-        })
-       
-
-# Scrumban specific form view
-class Scrumban_Sow_Wizard(SessionWizardView):
-    template_name = "agileSPM/wizard/scrumban_sow_template.html"
-    form_list = [SCRUMBAN_FORM]
-    
-    # Restores information from session to session.
-    def get(self, request, *args, **kwargs):
-        try:
-            return self.render(self.get_form())
-        except KeyError: 
-            return super().get(request,*args,**kwargs)
-
-    # Processes the whole document once it's completed.
-    def done(self, form_list, **kwargs):
-        return render(self.request,'agileSPM/wizard/done.html',{
-            'form_data': [form.cleaned_data for form in form_list]
-        })
-        
+                                                       'registered' : registered,})    
 
 # Scrum Document creation using docx-Python API
 def scrum_doc(request, id):
     user_input = SOWScrum.objects.get(id=id)
-    print(user_input.title)
+    print('Date printed',user_input.date_project)
 
 ## Document formatting, rules & styles ##
     s_project = Document()
@@ -283,7 +212,20 @@ def scrum_doc(request, id):
     body_text_style = s_project.styles['Body Text']
     list_bullet_style = s_project.styles['List Bullet']
     numbered_bullet_style = s_project.styles['ListNumber']
-    # title_scrum = form_data[0]['title']
+
+    # Casting datetime fields as string
+    date = str(user_input.date_project)
+    milestones = str(user_input.milestones)
+    delivery = str(user_input.delivery)
+    date_signature1 = str(user_input.date_signature1)
+    date_signature2 = str(user_input.date_signature2)
+
+    # Casting int values to string
+    sprints = str(user_input.sprint)
+    length = str(user_input.sprintLength)
+    invoice = str(user_input.invoice)
+
+
 
 ## Cover page ##
 
@@ -293,7 +235,7 @@ def scrum_doc(request, id):
     # Produced by 
     s_project.add_paragraph(user_input.produced_by, style=body_text_style)
     # Date created
-    s_project.add_paragraph(user_input.date_project, style=body_text_style)
+    s_project.add_paragraph(date, style=body_text_style)
     s_project.add_page_break()
 
 ## Overview ##
@@ -333,10 +275,10 @@ def scrum_doc(request, id):
     s_project.add_paragraph(user_input.sprintPlan, style=body_text_style)
     # Sprints
     para = s_project.add_paragraph('Number of Sprints:')
-    para.add_run(user_input.sprint).bold = True
+    para.add_run(sprints).bold = True
     # Sprint Length
     para = s_project.add_paragraph('Length of Sprint:')
-    para.add_run(user_input.sprintLength).bold = True
+    para.add_run(length).bold = True
     # Team 
     s_project.add_heading('Team Structure',level=1)
     s_project.add_paragraph(user_input.team, style=body_text_style)
@@ -357,10 +299,10 @@ def scrum_doc(request, id):
     header_cells = milestone_table.rows[0].cells
     header_cells[0].text = 'Milestone'
     header_cells[1].text = 'Date'
-    row = milestone_table.add_row(user_input.milestones) # Method adding a row, to be called! 
+    row = milestone_table.add_row() # Method adding a row, to be called! 
     # Delivery
     para = s_project.add_paragraph('Delivery date:')
-    para.add_run(user_input.delivery).bold = True
+    para.add_run(delivery).bold = True
 
     for row in milestone_table.rows:
         for cell in row.cells:
@@ -391,21 +333,21 @@ def scrum_doc(request, id):
     s_project.add_paragraph('Signature:', style='IntenseQuote')
     # Date
     para = s_project.add_paragraph('Date signed:')
-    para.add_run(user_input.date_signature1)
+    para.add_run(date_signature1)
     # Signature 2
     para = s_project.add_paragraph('Full Name:')
     para.add_run(user_input.secondName).bold = True
     s_project.add_paragraph('Signature:', style='IntenseQuote')
     # Date
     para = s_project.add_paragraph('Date signed:')
-    para.add_run(user_input.date_signature2)
+    para.add_run(date_signature2)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = 'attachment; filename=ScrumProject.docx'
     s_project.save(response)
     return response
 
-    return render(request, {'form data' : form_data})
+    return render(request)
 
 # Kanban Document creation using docx-Python API
 def kanban_doc(request):
