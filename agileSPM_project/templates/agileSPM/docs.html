@@ -4,7 +4,7 @@
 
 <html>
         {% block title_block %}
-            Create Dynamic Statements of Work
+            My Documents
         {% endblock %}
 
 {% block import_block %}
@@ -19,10 +19,20 @@
     <div>
 {% block body_block %}
 <div class="doc_page">
-    <div class="doc_content">
-        <i class="fas fa-file" id="file"></i>
-</div>
-    </div>
+   
+            {% for forms in user_scrum_forms %}
+              
+                <div class="card">
+                <a href="{% url 'edit_scrum_form' forms.id %}"><i class="fas fa-file" id="file"></i></a>
+                    <p id="text-btn"> {{ forms.title }}</p>
+                    <button class="btn" id="duplicate-btn" href="{% url 'edit_scrum_form' forms.id %}"><i class="fas fa-copy"></i> Copy</button>
+                    <button class="btn" id="edit-btn" href="{% url 'edit_scrum_form' forms.id %}"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn" id="delete-btn" href="{% url 'sow_form_delete' forms.id %}"><i class="fa fa-trash"></i> Delete</button>
+                </div> 
+            
+            {% endfor %}
+        </div>
+ 
 {% endblock %}
     </div>
 

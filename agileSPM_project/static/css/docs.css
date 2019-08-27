@@ -2,8 +2,46 @@
     width: 100%;
     height: 600px;
     background-color: #fafafa;
-   
+    list-style-type: none;
+    top: 20px;
+    /* align-content: flex-start;
+    display: flex;
+    justify-content: space-around; */
+
 }
+.card {
+    width: 280px;
+    height: 250px;
+    padding: 20px;
+    background-color: #ebe8e8;
+    border: 1px;
+    display: inline-block;
+    margin: 20px, 20px, 20px, 20px;
+    /* align-content: flex-start;
+    display: flex;
+    justify-content: space-around; */
+}
+
+.doc_content {
+    width: 100px;
+    height: 200px;
+    margin: auto;
+    color: #d9d9d9;
+
+}
+.btn {
+    background-color: DodgerBlue;
+    border: none;
+    color: white;
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Darker background on mouse-over */
+  .btn:hover {
+    background-color: RoyalBlue;
+  }
 
 #file {
     font-size: 150px;
@@ -11,3 +49,10 @@
     float: center;
 
 }
+
+p#text-button {
+    font-size: 18px;
+    color: black;
+    
+    
+  }

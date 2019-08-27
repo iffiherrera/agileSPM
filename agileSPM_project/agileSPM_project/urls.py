@@ -21,11 +21,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    # url(r'^$', views.index, name='index'),
-    # url(r'^agileSPM/', include('agileSPM.urls')),
-    # url(r'^admin/',admin.site.urls),
-    path('index/', views.index, name='index'),
+
+    path('', views.index, name='index'),
     path('agileSPM/', include('agileSPM.urls')),
     path('agileSPM/', include('django.contrib.auth.urls')),
     path('admin/',admin.site.urls),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

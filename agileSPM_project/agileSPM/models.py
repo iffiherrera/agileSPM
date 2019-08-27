@@ -3,17 +3,10 @@ from django.forms import ModelForm
 import datetime
 from django.contrib.auth.models import User
 
-# User field / Authentication 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.user.username
-
 # Scrum Statement of Work model
 class SOWScrum(models.Model):
-    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
     intro = models.TextField(blank=True)
@@ -45,8 +38,9 @@ class SOWScrum(models.Model):
 
 # Kanban Statement of Work database fields
 class SOWKanban(models.Model):
-    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    
     title = models.TextField(unique=True)
+    author = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
     intro = models.TextField(blank=True)
@@ -79,8 +73,8 @@ class SOWKanban(models.Model):
 
 # Scrumban Statement of Work database fields
 class SOWScrumban(models.Model):
-    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     title = models.TextField(unique=True)
+    author = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     produced_by = models.CharField(max_length=128, blank=True)
     date_project = models.DateField(default=datetime.date.today)
     intro = models.TextField(blank=True)

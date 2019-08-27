@@ -17,21 +17,38 @@
 <body>
 {% block body_block %}
         <div class="blockIntro">
-  
+                   
                     <h1><span>AgileSPM</span></h1><br />
-                    <h2><span>Quick & Easy Statements of work.</span></h2><br/> 
-                    <button class="btn">Button</button>
-                
+                    <h2><span>Quick & Easy Statements of work.</span>
+                        <br/> <button href="{% url 'register' %}" id="start-btn">Get started by signing up</button></h2>
+        </div>
+    <div class="blockLayer">
+            <div class="gallery">
+                    <a target="_blank" href="{% url 'scrum_form' %}">
+                      <img src="{% static 'images/scrum.png' %}"  width="200" height="200">
+                    </a>
+                    <div class="desc">Add a description of the image here</div>
+                  </div>
+            <div class="text-box"></div>
+                  
+                  <div class="gallery">
+                    <a target="_blank" href="{% url 'scrum_form' %}">
+                      <img src="{% static 'images/kanban.png' %}" alt="Forest" width="200" height="200">
+                    </a>
+                    <div class="desc">Add a description of the image here</div>
+                  </div>
+                  
+                  <div class="gallery">
+                    <a target="_blank" href="{% url 'scrum_form' %}">
+                      <img src="{% static 'images/scrumban.png' %}" alt="Northern Lights" width="200" height="200">
+                    </a>
+                    <div class="desc">Add a description of the image here</div>
+                  </div>
                 </div>
 
-        <div class="flex-container">
-            <div class="flex-item">Lorem ipsum</div>
-            <div class="flex-img"><img src="{% static "images/scrum.png" %}"></div>
-                
-        </div>
-        <div class="break1 container-fluid text-center">
- 
-                        </div>
+    <div class="blockTwo">
+                </div>
+
 {% endblock %}
 
 <script>

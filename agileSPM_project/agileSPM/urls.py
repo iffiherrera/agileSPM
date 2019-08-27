@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
 from agileSPM import views
-from .views import fullForm
+from .views import scrumForm, Edit_scrum_form, Delete_scrum_form
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
@@ -14,9 +14,13 @@ urlpatterns = [
     path('',views.index, name='index'),
     path('my_docs/', views.my_docs, name='my_docs'),
     path('register/',views.register, name='register'),
-    path('login/', LoginView.as_view(template_name='agileSPM/login.html'), name='login'),
-    path('form/', views.fullForm, name='full_form'),
-    # path('sow_scrum/<int:id>', views.),
+    # path('login/', LoginView.as_view(), name='login'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('restricted/', views.restricted, name='restricted'),
+    path('scrum_form/' , views.scrumForm, name='scrum_form'),
+    path('scrum_form//delete/<int:pk>/', Delete_scrum_form.as_view(), name='sow_form_delete'),
+    path('scrum_form/edit/<int:pk>/', Edit_scrum_form.as_view(), name="edit_scrum_form"),
     path('success/<int:id>/', views.success, name='success'),
     path('scrum_doc/<int:id>/', views.scrum_doc, name='scrum_doc'),
     path('kanban_doc/<int:id>/', views.kanban_doc, name='kanban_doc'),

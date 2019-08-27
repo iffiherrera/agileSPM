@@ -24,14 +24,23 @@ html,body {
 }
 
 .logo {
-  float: left;
-  vertical-align: center;
-  width: 200px;
+  /* float: left; */
+  /* vertical-align: center; */
+  /* width: 100px;
   height: 100px;
+  display: inline-block; */
+  /* vertical-align: top;
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+  margin-top: 15px; */
 }
 
-img.logo {
+#logo-btn {
   cursor: pointer;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
 }
 
 .navbar a {

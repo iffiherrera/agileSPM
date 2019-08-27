@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% extends 'agileSPM/base.html' %}
+{% load staticfiles %}
+
+<html>
+        {% block title_block %}
+            Login
+        {% endblock %}
+
+{% block import_block %}
+<link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+<link href="{% static "css/login.css" %}" rel="stylesheet" type="text/css" />
+<!-- <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" /> -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+<body>
+{% block body_block %}
+<div class="modal">
+    <div class="modal-content">
+            <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>Login</h2></div>
+
+                <form method="POST" action="{% url 'login' %}" >
+                        {% csrf_token %}
+                        <label> Username:</label>
+                        <input type="text" name="username" placeholder="username"><br/>
+                        <label> Password:</label>
+                        <input type="password" name="password" placeholder="password"><br/>
+                        <input type="submit" name="login-btn" value="Login"/>
+                        <p>Don't have an account? <a href="{% url 'register' %} ">Sign up</a></p>
+                        </form>
+
+</div>
+</div>
+
+<!-- <div class="modal-login">
+        <div class="modal-content-login">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Login</h2>
+
+            <form method="POST" actio="{% url 'login' %}" >
+            {% csrf_token %}
+            <label> Username:</label>
+            <input type="text" name="username" placeholder="username"><br/>
+            <label> Password:</label>
+            <input type="text" name="password" placeholder="password"><br/>
+            <input type="submit" name="login-btn" value="Login"/>
+            </form>
+         </div>
+    </div>
+</div> -->
+{% endblock %}
+
+<div>
+        {% block end_block %}
+        <!--Jquery goes here -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+        <script src="{% static "js/jquery.js" %}"></script>
+        {% endblock %}
+        </div>
+</body>
+</html>
+ 

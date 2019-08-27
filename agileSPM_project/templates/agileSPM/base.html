@@ -22,23 +22,28 @@
     </head>
     <body>  
     {% block header_block %} 
-            <header class="navbar">
-                <div class="logo">
-                        <img class="logo home-btn" src="{% static "images/agilespmLogo.png" %}"> </div>
+            <header class="navbar"> 
+                 <!-- <div class="logo"> -->
+                  <!-- <a href="{% url 'index' %}"><img id="logo-btn" src="{% static "images/agilespmLogo.png" %}"></a></div>  -->
                     <div class="navbar"> 
-                            <a id="user-login" href="{% url "login" %}">Login</a>
-                            <a id="user-signup" href="{% url "register" %}">Sign Up</a>
-                            <a id="contact" href="#">Contact</a>
+                      {% if user.is_authenticated %}
                             <div class="dropdown">
-                              <button class="dropbtn">Statement of Work</button>
-                              <div class="dropdown-content">
-                                <a href="#">Link 1</a>
-                                <a href="#">Link 2</a>
-                                <a href="#">Link 3</a>
-                              </div>
-                            </div>  
-                         </div>
+                                <button class="dropbtn">New Documents</button>
+                                <div class="dropdown-content">
+                                  <a href="{% url "scrum_form" %}" id="scrum-btn">Scrum project</a>
+                                  <a href="{% url "index" %}" id="kanban-btn">Kanban project</a>
+                                  <a href="{% url "index" %}" id="scrumban-btn">Scrumban project</a>
+                                </div>
+                                <a href="{% url "logout" %}" id="user-logout">Logout</a>
+                              </div> 
+                      {% else %}
+                            <a href="{% url "login" %}" id="user-login">Login</a>
+                            <a href="{% url "register" %}" id="user-signup">Sign Up</a>
+                            <a href="#" id="contact" >Contact</a> 
+                      {% endif %} 
+                         </div> 
                         </header>
+                       
              {% endblock %}  
     <!-- Main body content responsiveness -->
     
@@ -68,9 +73,9 @@
                 <div class="col">
                   <h1>Documents</h1>
                   <ul>
-                    <li class="home-btn" data-link="{% url "index" %}">Scrum</li>
-                    <li class="home-btn" data-link="{% url "index" %}">Kanban</li>
-                    <li class="home-btn" data-link="{% url "index" %}">Scrumban</li>
+                    <!-- <li class="scrum-btn" data-link="{% url "scrum_form" %}">Scrum</li> -->
+                    <li class="kanban-btn" data-link="{% url "index" %}">Kanban</li>
+                    <li class="scrumban-btn" data-link="{% url "index" %}">Scrumban</li>
 
                   </ul>
                 </div>

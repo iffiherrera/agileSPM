@@ -1,8 +1,8 @@
 from django.shortcuts import render, reverse, redirect
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from .models import SOWScrum, SOWKanban, SOWScrumban, UserProfile, User
+from .models import SOWScrum, SOWKanban, SOWScrumban, User
 from .forms import SOWScrumForm, UserForm, EditScrumForm
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.contrib.auth import authenticate, login, logout
@@ -11,19 +11,10 @@ from django.contrib.auth.models import User
 import datetime
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView
-
-
-# Login pop up 
-
-class login_view(BSModalCreateView):
-    template_name = 'agileSPM/register.html'
-    form_class = UserForm
-    success_message = 'Thank you for registering.'
-    success_url = reverse_lazy('index')
-
+from django.views.generic.edit import UpdateView, CreateView, DeleteView, FormView
 
 # Scrum form 
-def fullForm(request):
+def scrumForm(request):
     form = SOWScrumForm()
 
     if request.method == 'POST':
@@ -31,11 +22,13 @@ def fullForm(request):
 
         if form.is_valid(): 
             form = form.save(commit=False)
-            
-        
+            form.author = request.user
+            print('user', request.user)
             # form.datetime.now()   
+            # print(form.datetime)
             form.save()
             id = form.id
+            print('id created:', id)
             return redirect('success', id=id)
 
         else:
@@ -44,134 +37,92 @@ def fullForm(request):
     else:
         form = SOWScrumForm()
     
-    return render(request,'agileSPM/full_form.html', {'form' : form})
+    context_dict = {'user': request.user,
+                    'form': form}
 
+    return render(request,'agileSPM/full_form.html', context=context_dict)
+
+# Login view
+def login_view(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('my_docs'))
+            else:
+                return HttpResponse('No such account')
+        else:
+            print("Login details are not valid: {0},{1}".format(username,password))
+            return HttpResponse("Incorrent login details.")
+    else:
+        return render(request, 'registration/login.html', {} )
+
+# Restricted view decorator 
+@login_required
+def restricted(request):
+    print('restricted area accessed')
+    return render(request, 'agileSPM/register.html', {})
+
+# User logout ability
+@login_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
 # Successful completion of form view.
 def success(request, id):
+
     context_dict = {'id': id}
     return render(request,'agileSPM/wizard/done.html', context=context_dict)
 
 # Home view 
 def index(request):
     user_form = UserForm()
-
     context_dict = {
         'user_form': user_form,
     }
     return render(request, 'agileSPM/index.html', context=context_dict)
 
 # User account view 
-# @login_required()
+
 def my_docs(request):
+    user_scrum_forms = SOWScrum.objects.filter(author=request.user)
+    print(user_scrum_forms)
+
     context_dict = {'user': request.user,
-                    'id': id }
+                    'id': id,
+                    'user_scrum_forms': user_scrum_forms }
    
     print(request.user)
 
     return render(request, 'agileSPM/docs.html', context=context_dict)
 
-def edit_scrum_form(request,id):
-    scrum_form = SOWScrum.objects.get(id=id)
-    editable_form = EditScrumForm(instance=scrum_form)
+## View to allow user to edit existing data populated in the specific document id.
+class Edit_scrum_form(UpdateView):
+    model = SOWScrum
+    template_name = 'agileSPM/edit_sow_scrum.html'
+    fields = ['title','produced_by','date_project',
+                    'intro','deliverables','assumptions','inScope','outScope',
+                    'backlog','sprintLength','sprint','sprintPlan','team','done',
+                    'review','milestones', 'milestone_description','delivery','invoice',
+                    'invoice','invoice_info','amount','firstName',
+                    'date_signature1','secondName','date_signature2',]
 
-    if request.method == 'POST':
-        form = EditScrumForm(request.POST)
+    def form_valid(self, form, pk):
 
-        if form.is_valid():
-            # title
-            title_update = form.cleaned_data['title']
-            scrum_form.title = title_update
-            
-            
-            #produced by 
-            produced_update = form.cleaned_data['produced_by']
-            scrum_form.produced_by = produced_update
-            
+        self.object = form.save(commit=False)
+        self.object.save()
+       
+        return super().form_valid(form, pk)
 
-            # scrum.date_project = form.cleaned_data['date_project']
-            # scrum_form.title = title_update
-            # scrum.intro = form.cleaned_data['intro']
-            # scrum_form.title = title_update
-            # scrum.deliverables = form.cleaned_data['deliverables']
-            # scrum_form.title = title_update
-            # scrum.assumptions = form.cleaned_data['assumptions']
-            # scrum_form.title = title_update
-            # scrum.inScope = form.cleaned_data['inScope']
-            # scrum_form.title = title_update
-            # scrum.outScope = form.cleaned_data['outScope']
-            # scrum_form.title = title_update
-            # scrum.backlog = form.cleaned_data['backlog']
-            # scrum_form.title = title_update
-            # scrum.sprintLength = form.cleaned_data['sprintLength']
-            # scrum_form.title = title_update
-            # scrum.sprint = form.cleaned_data['sprint']
-            # scrum_form.title = title_update
-            # scrum.sprintPlan = form.cleaned_data['sprintPlan']
-            # scrum_form.title = title_update
-            # scrum.team = form.cleaned_data['team']
-            # scrum_form.title = title_update
-            # scrum.done = form.cleaned_data['done']
-            # scrum_form.title = title_update
-            # scrum.review = form.cleaned_data['review']
-            # scrum_form.title = title_update
-            # scrum.milestones = form.cleaned_data['milestones']
-            # scrum_form.title = title_update
-            # scrum.milestone_description = form.cleaned_data['milestone_desription']
-            # scrum_form.title = title_update
-            # scrum.delivery = form.cleaned_data['delivery']
-            # scrum_form.title = title_update
-            # scrum.invoice = form.cleaned_data['invoice']
-            # scrum_form.title = title_update
-            # scrum.invoice_info = form.cleaned_data['invoice_info']
-            # scrum_form.title = title_update
-            # scrum.amount = form.cleaned_data['amount']
-            # scrum_form.title = title_update
-            # scrum.firstName = form.cleaned_data['firstName']
-            # scrum_form.title = title_update
-            # scrum.date_signature1 = form.cleaned_data['date_signature1']
-            # scrum_form.title = title_update
-            # scrum.secondName = form.cleaned_data['secondName']
-            # scrum_form.title = title_update
-            # scrum.date_signature2 = form.cleaned_data['date_signature2']
-            # scrum_form.title = title_update
-
-
-            scrum_form.updated = datetime.now()
-            scrum_form.save()
-
-
-# Pop up login/sign up function using Ajax function and modal, returning a JSON response.
-# def login_popup(request):
-#     context_dict = {}
-#     if request.method == 'POST':
-#         # Request and validate username/password.
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         user = authenticate(username=username, password=password)
-
-#         if user:
-#             if user.is_active:
-#                 login(request, user)
-#                 return JsonResponse({'login': True})
-#             else:
-#                 context_dict['error'] = "Account is no longer active"
-#                 return JsonResponse({'login': False,
-#                                         'error': context_dict['error']})
-#         else:
-#             context_dict['error'] = "Username and password do not match. Please try again."
-#             print("Invalid:{0},{1}".format(username,password))
-#             return JsonResponse({'login': False,
-#                                         'error': context_dict['error']})
-#     else:
-#         context_dict['action'] = 'login'
-#         return render(request,'agileSPM/index.html', context=context_dict)
-
-# User logout ability
-@login_required()
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
+class Delete_scrum_form(DeleteView):
+    model = SOWScrum
+    success_url = reverse_lazy('agileSPM/my_docs')
 
 # Registration form completion and save to database
 def register(request):
@@ -192,15 +143,15 @@ def register(request):
             print(user_form.errors) # prints errors to terminal for testing/QA
     else:
         user_form = UserForm()
-    print('succesful', request.user)
+
+    print('succesful:', request.user)
     return render(request, 'agileSPM/register.html', {'user_form' : user_form,
                                                        'registered' : registered,})    
 
 # Scrum Document creation using docx-Python API
 def scrum_doc(request, id):
     user_input = SOWScrum.objects.get(id=id)
-    print('Date printed',user_input.date_project)
-
+    
 ## Document formatting, rules & styles ##
     s_project = Document()
     paragraph = s_project.add_paragraph()
@@ -224,8 +175,6 @@ def scrum_doc(request, id):
     sprints = str(user_input.sprint)
     length = str(user_input.sprintLength)
     invoice = str(user_input.invoice)
-
-
 
 ## Cover page ##
 

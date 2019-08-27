@@ -1,4 +1,4 @@
-
+/* 
 .container {
   position: relative;
   margin: 20px;
@@ -23,12 +23,12 @@
 }
 
 /* Statement of work specific  */
-.dropdown {
+/* .dropdown {
   float: right;
   overflow: hidden;
-}
+} */
 
-.dropdown .dropbtn {
+/* .dropdown .dropbtn {
   font-size: 16px;  
   font-weight: normal;
   text-transform: uppercase;
@@ -42,8 +42,8 @@
   background-color: inherit;
   font-family: inherit;
   margin: 0;
-}
-
+} */
+/* 
 .navbar a:hover, .dropdown:hover .dropbtn {
   color: #082eac;
 }
@@ -55,9 +55,9 @@
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(179, 62, 62, 0.2);
   z-index: 1;
-}
+} */
 
-.dropdown-content a {
+/* .dropdown-content a {
   float: none;
   color: white;
   padding: 12px 16px;
@@ -72,10 +72,10 @@
 
 .dropdown:hover .dropdown-content {
   display: block;
-}
+} */
 
 /* Navigation bar mobile screen  */
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
   .navbar a {
     float: none;
     display: block;
@@ -85,9 +85,9 @@
   .dropdown {
     float: center;
     /* align-items: center; */
-    display: block;
+    /* display: block;
   }
-}
+}  */ 
 
 /* HOME/ INDEX */
 
@@ -216,21 +216,54 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   flex-flow: row wrap;
-  height: 100%;
+  height: 75%;
   width: 100%;
   overflow: hidden;
   position: relative;
-  background: url(/static/images/intro.jpg);
+  background: 
+       url(/static/images/intro.jpg) center center fixed;
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; 
+  /* Image by rawpixel at Pixabay */
 }
 /* Image by Engin Akyurt at Pixabay  */
 
-.break1 {
-  background: url(https://images.unsplash.com/photo-1432836431433-925d3cc0a5cd?fit=crop&fm=jpg&h=700&q=80&w=1050) center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+.blockLayer {
+  background-color: #fafafa;
+  height: 500px;
+  width: 100%;
+}
+
+.blockLayer #one {
+  height: 100px;
+  width: 100%;
+}
+
+div.gallery {
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: center;
+  width: 180px;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+.text-box{
+  width: 500px;
+  height: 500px;
+  color: #ffffff;
+  position: absolute;
 }

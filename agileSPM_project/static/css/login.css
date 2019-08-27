@@ -1,0 +1,51 @@
+
+.modal {
+ height:100%;
+ width: 100%;
+ background-color: rgba(5, 34, 129,0.7);
+ position: absolute;
+ top: 0;
+ display: flex;
+ justify-content: center;
+ align-items: center; 
+}
+
+.modal-content {
+    height: 350px;
+    width: 500px;
+    background-color: #ffffff;
+    position: absolute;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+  }
+
+ /* Submit button */
+ input[type=submit] {
+    background-color: #f45386;
+    color: white;
+    text-align: center;
+    float: center;
+    font-size: 18px;
+    padding: 20px 50px;
+    border-radius: 4px;
+    cursor: pointer;
+  }  
+  /* Submit button hover*/
+  input[type=submit]:hover {
+    background-color: #d13365;
+  }
+
+  input[type=text], [type=password] {
+    width: 100%; 
+    padding: 12px; 
+    box-sizing: border-box; 
+    margin-top: 6px; 
+    margin-bottom: 16px; 
+    resize: vertical;
+  }
+ 
