@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from .models import SOWScrum, SOWKanban, SOWScrumban, User
-from .forms import SOWScrumForm, UserForm, EditScrumForm
+from .forms import SOWScrumForm, EditScrumForm, SignUpModalForm, RegisterForm
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,33 @@ from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView, FormView
 
+
+# BS modal sign up pop up 
+class ModalSignUpView(BSModalCreateView):
+    form_class = SignUpModalForm
+    template_name = 'agileSPM/register.html'
+    success_url = reverse_lazy('my_docs')
+
+def register(request):
+
+    if request.method == 'POST':
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            register_form.save()
+            username = register_form.cleaned_data.get('username')
+            email = register_form.cleaned_data.get('email')
+            password1 = register_form.cleaned_data.get('password1')
+            password2 = register_form.cleaned_data.get('password2')
+            print('username was succesful', username)
+            return redirect('my_docs')
+    else:
+        register_form = RegisterForm()
+
+    return render(request,'agileSPM/register.html', {'register_form' : register_form})
+
+
 # Scrum form 
+@login_required
 def scrumForm(request):
     form = SOWScrumForm()
 
@@ -42,48 +68,19 @@ def scrumForm(request):
 
     return render(request,'agileSPM/full_form.html', context=context_dict)
 
-# Login view
-def login_view(request):
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(reverse('my_docs'))
-            else:
-                return HttpResponse('No such account')
-        else:
-            print("Login details are not valid: {0},{1}".format(username,password))
-            return HttpResponse("Incorrent login details.")
-    else:
-        return render(request, 'registration/login.html', {} )
-
-# Restricted view decorator 
-@login_required
-def restricted(request):
-    print('restricted area accessed')
-    return render(request, 'agileSPM/register.html', {})
-
-# User logout ability
-@login_required
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
-
 # Successful completion of form view.
 def success(request, id):
+    complete_scrum_forms = SOWScrum.objects.filter(author=request.user)
+    context_dict = {'id': id,
+                    'complete_scrum_forms': complete_scrum_forms}
 
-    context_dict = {'id': id}
     return render(request,'agileSPM/wizard/done.html', context=context_dict)
 
 # Home view 
 def index(request):
-    user_form = UserForm()
+    user_form = RegisterForm()
     context_dict = {
+        'user': request.user,
         'user_form': user_form,
     }
     return render(request, 'agileSPM/index.html', context=context_dict)
@@ -104,6 +101,7 @@ def my_docs(request):
 
 ## View to allow user to edit existing data populated in the specific document id.
 class Edit_scrum_form(UpdateView):
+
     model = SOWScrum
     template_name = 'agileSPM/edit_sow_scrum.html'
     fields = ['title','produced_by','date_project',
@@ -113,41 +111,27 @@ class Edit_scrum_form(UpdateView):
                     'invoice','invoice_info','amount','firstName',
                     'date_signature1','secondName','date_signature2',]
 
-    def form_valid(self, form, pk):
-
+    def form_valid(self, form):
+        print('object',form)
         self.object = form.save(commit=False)
         self.object.save()
+        id = form.auto_id
+        return redirect('edit_success', id=id)
+        # print('Edit successful', pk)
        
-        return super().form_valid(form, pk)
+        return super().form_valid(form)
+
+def edit_success(request, id):
+    edited_scrum_forms = SOWScrum.objects.filter(author=request.user)
+    context_dict = {'id': id,
+                    'edited_scrum_forms': edited_scrum_forms}
+
+    return render(request,'agileSPM/edit.html', context=context_dict)
 
 class Delete_scrum_form(DeleteView):
     model = SOWScrum
     success_url = reverse_lazy('agileSPM/my_docs')
-
-# Registration form completion and save to database
-def register(request):
-    registered = False # Initially set to false because registration is not completed.
-
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-    
-        # Saves user and profile input to database.
-        if user_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            registered = True # Sets registration to true at this point.
-            return redirect('my_docs')
-
-        else:
-            print(user_form.errors) # prints errors to terminal for testing/QA
-    else:
-        user_form = UserForm()
-
-    print('succesful:', request.user)
-    return render(request, 'agileSPM/register.html', {'user_form' : user_form,
-                                                       'registered' : registered,})    
-
+  
 # Scrum Document creation using docx-Python API
 def scrum_doc(request, id):
     user_input = SOWScrum.objects.get(id=id)
@@ -243,35 +227,39 @@ def scrum_doc(request, id):
 
     # Milestones table 
     s_project.add_heading('Milestones',level=1)
-    milestone_table = s_project.add_table(rows=3, cols=2)
-    milestone_table.style = 'LightShading-Accent1'
-    header_cells = milestone_table.rows[0].cells
-    header_cells[0].text = 'Milestone'
-    header_cells[1].text = 'Date'
-    row = milestone_table.add_row() # Method adding a row, to be called! 
+    s_project.add_paragraph(milestones, style=list_bullet_style)
+    s_project.add_paragraph(user_input.milestone_description, style=body_text_style)
+    # milestone_table = s_project.add_table(rows=3, cols=2)
+    # milestone_table.style = 'LightShading-Accent1'
+    # header_cells = milestone_table.rows[0].cells
+    # header_cells[0].text = 'Milestone'
+    # header_cells[1].text = 'Date'
+    # row = milestone_table.add_row() # Method adding a row, to be called! 
     # Delivery
     para = s_project.add_paragraph('Delivery date:')
     para.add_run(delivery).bold = True
 
-    for row in milestone_table.rows:
-        for cell in row.cells:
-            print(cell.text)
+    # for row in milestone_table.rows:
+    #     for cell in row.cells:
+    #         print(cell.text)
 
 ## Costs ## 
 
     # Invoice schedule table
     s_project.add_heading('Invoice schedule',level=1)
-    invoice_table = s_project.add_table(rows=3, cols=3)
-    invoice_table.style = 'LightShading-Accent1'
-    header_cells = invoice_table.rows[0].cells
-    header_cells[0].text = 'Invoice number'
-    header_cells[1].text = 'Date'
-    header_cells[2].text = 'Total'
-    row = invoice_table.add_row() # Method adding a row, to be called! 
+    s_project.add_paragraph(invoice, style=body_text_style)
+    s_project.add_paragraph(user_input.invoice_info, style=body_text_style)
+    # invoice_table = s_project.add_table(rows=3, cols=3)
+    # invoice_table.style = 'LightShading-Accent1'
+    # header_cells = invoice_table.rows[0].cells
+    # header_cells[0].text = 'Invoice number'
+    # header_cells[1].text = 'Date'
+    # header_cells[2].text = 'Total'
+    # row = invoice_table.add_row() # Method adding a row, to be called! 
 
-    for row in invoice_table.rows:
-            for cell in row.cells:
-                print(cell.text)
+    # for row in invoice_table.rows:
+    #         for cell in row.cells:
+    #             print(cell.text)
 
 ## Acceptance ##
 

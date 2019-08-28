@@ -15,73 +15,54 @@
 {% endblock %}
 
 <body>
+  <div>
 {% block body_block %}
         <div class="blockIntro">
                    
                     <h1><span>AgileSPM</span></h1><br />
                     <h2><span>Quick & Easy Statements of work.</span>
-                        <br/> <button href="{% url 'register' %}" id="start-btn">Get started by signing up</button></h2>
+                        <br/> </h2>
+                    <!-- <input type="submit" href="{% url 'login' %}" value="Start by logging in">  </h2> -->
         </div>
-    <div class="blockLayer">
+        <!-- <ul>
             <div class="gallery">
                     <a target="_blank" href="{% url 'scrum_form' %}">
                       <img src="{% static 'images/scrum.png' %}"  width="200" height="200">
                     </a>
                     <div class="desc">Add a description of the image here</div>
-                  </div>
-            <div class="text-box"></div>
-                  
-                  <div class="gallery">
-                    <a target="_blank" href="{% url 'scrum_form' %}">
-                      <img src="{% static 'images/kanban.png' %}" alt="Forest" width="200" height="200">
-                    </a>
-                    <div class="desc">Add a description of the image here</div>
-                  </div>
-                  
-                  <div class="gallery">
-                    <a target="_blank" href="{% url 'scrum_form' %}">
-                      <img src="{% static 'images/scrumban.png' %}" alt="Northern Lights" width="200" height="200">
-                    </a>
-                    <div class="desc">Add a description of the image here</div>
-                  </div>
-                </div>
+                  </div>     
 
+                  <div class="gallery">
+                    <a target="_blank" href="{% url 'scrum_form' %}">
+                      <img src="{% static 'images/kanban.png' %}"  width="200" height="200">
+                    </a>
+                    <div class="desc">Add a description of the image here</div>
+                  </div>
+                  
+                  <div class="gallery">
+                    <a target="_blank" href="{% url 'scrum_form' %}">
+                      <img src="{% static 'images/scrumban.png' %}" width="200" height="200">
+                    </a>
+                    <div class="desc">Add a description of the image here</div>
+                  </div>
+          
+            </ul>
     <div class="blockTwo">
-                </div>
+                </div> -->
 
 {% endblock %}
+</div>
+{% block footer_block %}
 
-<script>
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
-}
-
-// Change style of navbar on scroll
-window.onscroll = function() {myFunction()};
-function myFunction() {
-    var navbar = document.getElementById("myNavbar");
-    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-        navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
-    } else {
-        navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
-    }
-}
-
-// Used to toggle the menu on small screens when clicking on the menu button
-function toggleFunction() {
-    var x = document.getElementById("navDemo");
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
-    } else {
-        x.className = x.className.replace(" w3-show", "");
-    }
-}
-</script> 
-
+{% endblock %}
+<div>
+    {% block end_block %}
+    <!-- Jquery goes here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+    <script src="{% static "js/jquery.js" %}"></script>
+    {% endblock %}
+    </div>
 </body>
 </html>
 

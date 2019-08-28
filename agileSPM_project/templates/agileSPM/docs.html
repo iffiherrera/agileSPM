@@ -19,15 +19,27 @@
     <div>
 {% block body_block %}
 <div class="doc_page">
+
+    <div class="doc">
+    <a href="{% url 'scrum_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a> 
+    <p id="text-para"> Create Scrum Document</p> </div>
+    <div class="doc">
+    <a href="{% url 'scrum_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a>
+    <p id="text-para"> Create Kanban Document</p> </div>
+    <div class="doc">
+    <a href="{% url 'scrum_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a>
+         <p id="text-para"> Create Scrumban Document</p></div>
+    <div class="hr"></div>
+    <div id="title_doc"> <h1>Your documents</h1></div>
    
             {% for forms in user_scrum_forms %}
               
                 <div class="card">
                 <a href="{% url 'edit_scrum_form' forms.id %}"><i class="fas fa-file" id="file"></i></a>
                     <p id="text-btn"> {{ forms.title }}</p>
-                    <button class="btn" id="duplicate-btn" href="{% url 'edit_scrum_form' forms.id %}"><i class="fas fa-copy"></i> Copy</button>
-                    <button class="btn" id="edit-btn" href="{% url 'edit_scrum_form' forms.id %}"><i class="fas fa-edit"></i> Edit</button>
-                    <button class="btn" id="delete-btn" href="{% url 'sow_form_delete' forms.id %}"><i class="fa fa-trash"></i> Delete</button>
+                    <button class="btn" id="duplicate-btn" data-link="{% url 'edit_scrum_form' forms.id %}" onclick="duplicateURL()"><i class="fas fa-download"></i> Save</button>
+                    <button class="btn" id="edit-btn" href="{% url 'edit_scrum_form' forms.id %}" onclick="editURL()"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn" id="delete-btn" href="{% url 'sow_form_delete' forms.id %}" onclick="deleteURL()"><i class="fa fa-trash"></i> Delete</button>
                 </div> 
             
             {% endfor %}
@@ -37,7 +49,7 @@
     </div>
 
 {% block end_block%}
-<script src="{% static "js/sow.js" %}"></script>
+<script src="{% static "js/docs.js" %}"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 {% endblock %}
 </body>

@@ -1,26 +1,41 @@
 .doc_page {
     width: 100%;
-    height: 600px;
+    /* min-height: 600px; */
+    height: 100%;
     background-color: #fafafa;
     list-style-type: none;
     top: 20px;
+    padding: 20px;
     /* align-content: flex-start;
     display: flex;
     justify-content: space-around; */
 
 }
+#title_doc {
+
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px,20px,20px,20px;
+}
+.hr {
+    width: 200px;
+    text-align: center;
+    color: black;
+}
 .card {
-    width: 280px;
-    height: 250px;
+    width: 300px;
+    height: 200px;
     padding: 20px;
     background-color: #ebe8e8;
     border: 1px;
     display: inline-block;
     margin: 20px, 20px, 20px, 20px;
+    text-align: center;
     /* align-content: flex-start;
     display: flex;
     justify-content: space-around; */
 }
+
 
 .doc_content {
     width: 100px;
@@ -44,15 +59,36 @@
   }
 
 #file {
-    font-size: 150px;
+    font-size: 100px;
+    color: #f45386;
+    align-items: center;
+
+}
+#addDoc {
+    font-size: 100px;
     color: #f45386;
     float: center;
 
+}
+.doc {
+    width: 100px;
+    height: 200px;
+    padding: 20px;
+    border: 1px;
+    display: inline-block;
+    margin: 20px, 20px, 20px, 20px;
+    text-align: center;
+    
 }
 
 p#text-button {
     font-size: 18px;
     color: black;
-    
-    
+ 
   }
+
+#text-para {
+    font-size: 18px;
+    color: black;
+    float: center;
+}

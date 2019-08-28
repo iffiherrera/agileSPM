@@ -26,7 +26,7 @@ class SOWScrum(models.Model):
     delivery = models.DateField(default=datetime.date.today)
     invoice = models.DateField(default=datetime.date.today)
     invoice_info = models.CharField(max_length=128, blank=True)
-    amount = models.FloatField(default=0,blank=False)
+    amount = models.TextField(blank=False)
     firstName = models.TextField(blank=True)
     date_signature1 = models.DateField(default=datetime.date.today)
     secondName = models.TextField(blank=True)

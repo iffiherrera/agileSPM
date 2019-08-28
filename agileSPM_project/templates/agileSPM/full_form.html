@@ -14,28 +14,32 @@
 
 {% block body_block %}
 <body>
+ 
 <div class="sidebar">
-        <a href="{{ wizard.steps.first}}" onclick="">Cover Information</a>
-        <a href="{{ wizard.steps.second}}">Introduction</a>
-        <a href="{{ wizard.steps.third}}">Ojectives</a>
-        <a href="{{ wizard.steps.fourth}}">Scope</a>
-        <a href="{{ wizard.steps.fifth}}">Tasks</a>
-        <a href="{{ wizard.steps.sixth}}">Scrum delivery</a>
-        <a href="{{ wizard.steps.seventh}">Timescales</a>
-        <a href="{{ wizard.steps.eigth}}">Project Cost</a>
-        <a href="{{ wizard.steps.ninth}}">Acceptance</a>
+        <a href="#titleID">Cover Information</a>
+        <a href="#introID">Introduction</a>
+        <a href="#deliverablesID">Ojectives</a>
+        <a href="#scopeID">Scope</a>
+        <a href="#backlogID">Tasks</a>
+        <a href="#lengthID">Scrum delivery</a>
+        <a href="#milestonesID">Timescales</a>
+        <a href="#invoiceID">Project Cost</a>
+        <a href="#nameoneID">Acceptance</a>
+        <a href="{% url 'my_docs' %}">Home</a>
       </div>
 
 <div class="formBox">
-<form id="SOWForm" method="POST">
+<form id="SOWForm" method="POST" value="SAVE">
    
     {% csrf_token %}
-    {{ form }}
+   
+    {{ form.as_p }}
 
     <input type="submit" value="{% trans "SAVE" %}" />
 
 </form>
 </div>
+
 </body>
 {% endblock %}
 </html>

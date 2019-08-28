@@ -67,5 +67,11 @@ $(document).ready(function(){
     });
 });
 
+// Sign up button from Modal 
+$(function () {
+    
+    $(".signup-btn").modalForm({formURL: "{% url 'signup' %}"});
+
+  });
 
 /********* FOOTER  ************/

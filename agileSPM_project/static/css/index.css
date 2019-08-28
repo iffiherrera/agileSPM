@@ -141,7 +141,7 @@
 #indexBtn:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
-.blockIntro .btn {
+.blockIntro {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -158,6 +158,33 @@
 
 .blockIntro .btn:hover {
   background-color: black;
+}
+.blockIntro input[type=submit] {
+  background-color: #f45386;
+  color: white;
+  text-align: center;
+  float: center;
+  font-size: 18px;
+  padding: 20px 50px;
+  border-radius: 4px;
+  cursor: pointer;
+}  
+/* Submit button hover*/
+input[type=submit]:hover {
+  background-color: #d13365;
+}
+.button1 {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+
 }
 
 /* SECOND BLOCK  */
@@ -221,7 +248,7 @@
   overflow: hidden;
   position: relative;
   background: 
-       url(/static/images/intro.jpg) center center fixed;
+       url(/static/images/block_home.jpg) center center fixed;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat; 

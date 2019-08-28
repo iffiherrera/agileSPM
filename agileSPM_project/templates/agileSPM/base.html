@@ -23,18 +23,21 @@
     <body>  
     {% block header_block %} 
             <header class="navbar"> 
-                 <!-- <div class="logo"> -->
-                  <!-- <a href="{% url 'index' %}"><img id="logo-btn" src="{% static "images/agilespmLogo.png" %}"></a></div>  -->
+                 <div class="logo">
+                  <a href="{% url 'index' %}"><img id="logo-btn" src="{% static "images/agilespmLogo.png" %}"></a></div> 
                     <div class="navbar"> 
                       {% if user.is_authenticated %}
+                      <a href="{% url "logout" %}" id="user-logout">Logout</a>
                             <div class="dropdown">
-                                <button class="dropbtn">New Documents</button>
+                                <button class="dropbtn">New Project</button>
                                 <div class="dropdown-content">
-                                  <a href="{% url "scrum_form" %}" id="scrum-btn">Scrum project</a>
-                                  <a href="{% url "index" %}" id="kanban-btn">Kanban project</a>
-                                  <a href="{% url "index" %}" id="scrumban-btn">Scrumban project</a>
+                                  <a href="{% url "scrum_form" %}" id="scrum-btn">Scrum doc</a>
+                                  <a href="{% url "index" %}" id="kanban-btn">Kanban doc</a>
+                                  <a href="{% url "index" %}" id="scrumban-btn">Scrumban doc</a>
                                 </div>
-                                <a href="{% url "logout" %}" id="user-logout">Logout</a>
+                                <a href="{% url "my_docs" %}" id="user-docs">My Docs</a>
+                                
+
                               </div> 
                       {% else %}
                             <a href="{% url "login" %}" id="user-login">Login</a>
@@ -83,20 +86,25 @@
             </div>
 </footer>
 {% endblock %}
-
 <div>
+
+  <!-- Modal block  -->
+{% block modal_block %}
+<!-- <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+  
+  <button class="signup-btn btn btn-primary" type="button" name="button">Sign up</button>
+   -->
+{% endblock %}
+
 {% block end_block %}
 <!-- Jquery goes here -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
 <script src="{% static "js/jquery.js" %}"></script>
-{% endblock %}
-</div>
-
-<!-- Modal section login/sign up pop up -->
-<div>
-{% block modal_block %}
-
 {% endblock %}
 </div>
     </body>

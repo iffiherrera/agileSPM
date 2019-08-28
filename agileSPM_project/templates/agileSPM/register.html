@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-{% extends 'agileSPM/base.html' %}
+<!-- {% extends 'agileSPM/base.html' %} -->
 {% load staticfiles %}
 
 <html>
         {% block title_block %}
-            Login
+            Sign up 
         {% endblock %}
 
 {% block import_block %}
 <link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
-<!-- <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" /> -->
 <link href="{% static "css/signup.css" %}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,6 +17,7 @@
 <body>
   <div>
 {% block body_block %}
+
 <div class="modal-signup">
     <div class="modal-content">
         <div class="modal-header">
@@ -26,7 +26,7 @@
       <form method="POST">
         {% csrf_token %}
         <div class="forms">
-          {{ user_form.as_p }}
+          {{ register_form.as_p }}
          <input type="submit" value="Sign up"/>
          <p>Already a user? <a href="{% url 'login' %} ">Login</a></p>
         </div>
@@ -34,6 +34,7 @@
             </div>
           </div>
         </div>
+
 {% endblock %}
 </div>
 <div>
