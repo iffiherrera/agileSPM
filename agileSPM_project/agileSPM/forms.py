@@ -1,12 +1,14 @@
 from django import forms
-from django.forms import ModelForm, formset_factory
-from .models import SOWScrum, SOWKanban, SOWScrumban
+from django.forms import ModelForm, inlineformset_factory
+from .models import SOWScrum, SOWKanban, SOWScrumban, MilestonesScrum
+from django.forms import BaseInlineFormSet, BaseModelForm, BaseModelFormSet
 from django.contrib.auth.models import User
 from bootstrap_modal_forms.forms import BSModalForm
 from django.contrib.auth.forms import UserCreationForm
 from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 import datetime
 from django.views.generic.edit import UpdateView
+
 
 # User forms for sign up
 # Overriding the existing help_text with nothing to make sign up page cleaner.
@@ -76,14 +78,6 @@ class SOWScrumForm(forms.ModelForm):
     team = forms.CharField(widget=forms.Textarea(attrs={'id':'teamID', 'spellcheck': 'true', 'placeholder':'Team members involved in the project and their roles'}), label='Team members',required=False)
     done = forms.CharField(widget=forms.Textarea(attrs={'id':'doneID', 'spellcheck': 'true', 'placeholder': 'An overall defintion of done to check back against for validation'}), label='Defining Done',required=False)
     review = forms.CharField(widget=forms.Textarea(attrs={'id':'reviewID', 'spellcheck': 'true', 'placeholder': 'Include any review opportunities at certain stages of the development'}), label='Sprint review',required=False)
-    milestones = forms.DateField(widget=DateInput(attrs={'id':'milestonesID'}), label='Milestones',required=False)
-    milestone_description = forms.CharField(widget=forms.Textarea(attrs={'id':'milestonedescID', 'spellcheck': 'true', 'placeholder':'Describe why the milestone is set to that date and its importance to the project'}),label='Description',required=False) 
-    # milestones_1 = forms.DateField(widget=DateInput(attrs={'id':'milestonesID'}), label='Milestones',required=False)
-    # milestone_description_1 = forms.CharField(widget=forms.Textarea(attrs={'id':'milestonedescID', 'spellcheck': 'true', 'placeholder':'Describe why the milestone is set to that date and its importance to the project'}),label='Description',required=False) 
-    # milestones_2 = forms.DateField(widget=DateInput(attrs={'id':'milestonesID'}), label='Milestones',required=False)
-    # milestone_description_2 = forms.CharField(widget=forms.Textarea(attrs={'id':'milestonedescID', 'spellcheck': 'true', 'placeholder':'Describe why the milestone is set to that date and its importance to the project'}),label='Description',required=False) 
-    # milestones_3 = forms.DateField(widget=DateInput(attrs={'id':'milestonesID'}), label='Milestones',required=False)
-    # milestone_description_3 = forms.CharField(widget=forms.Textarea(attrs={'id':'milestonedescID', 'spellcheck': 'true', 'placeholder':'Describe why the milestone is set to that date and its importance to the project'}),label='Description',required=False) 
     delivery = forms.DateField(widget=DateInput(attrs={'id':'deliveryID'}), label='Delivery date',required=False)
     invoice = forms.DateField(widget=DateInput(attrs={'id':'invoiceID'}),label='Invoice date',required=False)
     invoice_info = forms.CharField(max_length=500, widget=forms.TextInput(attrs={'id':'invoiceinfoID', 'spellcheck': 'true', 'placeholder':'Describe what the invoice is for, if it is the whole amount or a partial amount of the whole project budget'}), label='Description',required=False)
@@ -99,10 +93,32 @@ class SOWScrumForm(forms.ModelForm):
         fields = ['title','produced_by','date_project',
                     'intro','deliverables','assumptions','inScope','outScope',
                     'backlog','sprintLength','sprint','team','done',
-                    'review','milestones', 'milestone_description','delivery','invoice',
+                    'review','delivery','invoice',
                     'invoice','invoice_info','amount','firstName',
                     'date_signature1','secondName','date_signature2',]
 
+# # Formset associated with scrum form that allows user to add multiple milestones 
+# MilestonesFormset = inlineformset_factory(SOWScrum,MilestonesScrum, 
+#                                             form = SOWScrumForm, 
+#                                             fields=['milestones','milestone_description'],
+#                                             extra=1, can_delete=True)
+
+MilestonesFormset = inlineformset_factory(SOWScrum, MilestonesScrum, 
+                                            formset=BaseMilestonesFormset, 
+                                            extra=1, can_delete=True)
+
+class BaseMilestonesFormset(BaseInlineFormSet):
+    
+    def add_fields(self, form, index):
+        super(BaseMilestonesFormset, self).add_fields(form, index)
+
+        form_nested = MilestonesFormset(instance=form.instance, data=form.data if form.is_bound else None,
+                                        files=form.files if form.is_bound else None,
+                                        prefix='milestones-%s-%s' % (form.prefix, MilestonesFormset.get_default_prefix()), extra=1)
+
+
+
+    
 
 # Editable form from User's collection of finished and unfinished documents
 class EditScrumForm(forms.Form):

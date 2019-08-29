@@ -13,12 +13,8 @@ from .models import SOWKanban, SOWScrum, SOWScrumban
 urlpatterns = [
     path('',views.index, name='index'),
     path('my_docs/', views.my_docs, name='my_docs'),
-    # path('register/',views.register, name='register'),
-    # path('login/', LoginView.as_view(), name='login'),
     path('signup/', views.ModalSignUpView.as_view(), name='signup'),
-    # path('login/', views.login_view, name='login'),
-    # path('logout/', views.logout_view, name='logout'),
-    # path('restricted/', views.restricted, name='restricted'),
+    path('test_form/<int:id>/', views.test_form, name='test'),
     path('scrum_form/' , views.scrumForm, name='scrum_form'),
     path('scrum_form//delete/<int:pk>/', Delete_scrum_form.as_view(), name='sow_form_delete'),
     path('scrum_form/edit/<int:pk>/', Edit_scrum_form.as_view(), name="edit_scrum_form"),

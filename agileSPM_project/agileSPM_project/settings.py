@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'agileSPM',
     'formtools',
     'bootstrap_modal_forms',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,6 @@ MEDIA_URL = '/media/'
 # LOGIN_URL = '/agileSPM/login/'
 LOGIN_REDIRECT_URL = '/agileSPM/my_docs/'
 LOGOUT_REDIRECT_URL = '/agileSPM/'
+
+# Crispy template pack external CSS framework
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

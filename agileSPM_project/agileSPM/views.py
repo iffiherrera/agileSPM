@@ -3,16 +3,30 @@ from django.http import HttpResponse, HttpResponseRedirect
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from .models import SOWScrum, SOWKanban, SOWScrumban, User
-from .forms import SOWScrumForm, EditScrumForm, SignUpModalForm, RegisterForm
+from .forms import SOWScrumForm, EditScrumForm, SignUpModalForm, RegisterForm, MilestonesFormset
 from formtools.wizard.views import WizardView, SessionWizardView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import datetime
 from django.urls import reverse_lazy
+from django.db import transaction
 from bootstrap_modal_forms.generic import BSModalCreateView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView, FormView
 
+def test_form(request, id):
+    s_form = SOWScrum.objects.get(pk=id)
+
+    if request.method == 'POST':
+        formset = MilestonesFormset(request.POST, instance=s_form)
+        if formset.is_valid():
+            formset.save()
+            return redirect('success', id=s_form.id)
+        else:
+            formset = MilestonesFormset(instance=s_form)
+    
+    return render(request, 'agileSPM/test_form',{'scrum_form': s_form,
+                                                'formset': formset})
 
 # BS modal sign up pop up 
 class ModalSignUpView(BSModalCreateView):
@@ -67,6 +81,67 @@ def scrumForm(request):
                     'form': form}
 
     return render(request,'agileSPM/full_form.html', context=context_dict)
+
+class ScrumFormView(CreateView):
+    model = SOWScrum
+    template_name = 'agileSPM/full_form.html'
+    form_class = SOWScrumForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        data = super(ScrumFormView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['scrum_milestones'] = MilestonesFormset(self.request.POST)
+        else:
+            data['scrum_milestones'] = MilestonesFormset()
+
+        return data
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        scrum_milestones = context['scrum_milestones']
+        with transaction.atomic():
+            form.instance.author = self.request.user
+            self.object = form.save()
+            if scrum_milestones.is_valid():
+                scrum_milestones.instance = self.object
+                scrum_milestones.save()
+
+        return super(SOWScrum, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('success',kwargs={'pk': self.object.pk})
+
+
+class UpdateScrum(UpdateView):
+    model = SOWScrum
+    template_name = 'agileSPM/full_form.html'
+    form_class = SOWScrumForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        data = super(UpdateScrum, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['scrum_milestones'] = MilestonesFormset(self.request.POST, instance=self.object)
+        else:
+            data['scrum_milestones'] = MilestonesFormset(instance=self.object)
+
+        return data
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        scrum_milestones = context['scrum_milestones']
+        with transaction.atomic():
+            form.instance.author = self.request.user
+            self.object = form.save()
+            if scrum_milestones.is_valid():
+                scrum_milestones.instance = self.object
+                scrum_milestones.save()
+
+        return super(SOWScrum, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('success',kwargs={'pk': self.object.pk})
 
 # Successful completion of form view.
 def success(request, id):

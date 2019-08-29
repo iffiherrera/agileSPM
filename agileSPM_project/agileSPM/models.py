@@ -20,8 +20,6 @@ class SOWScrum(models.Model):
     team = models.TextField(blank=True)
     done = models.TextField(blank=True)
     review = models.TextField(blank=True)
-    milestones = models.DateField(default=datetime.date.today)
-    milestone_description = models.CharField(max_length=128,blank=True) 
     delivery = models.DateField(default=datetime.date.today)
     invoice = models.DateField(default=datetime.date.today)
     invoice_info = models.CharField(max_length=128, blank=True)
@@ -32,8 +30,25 @@ class SOWScrum(models.Model):
     date_signature2 = models.DateField(default=datetime.date.today)
     updated = models.DateTimeField('Last updated', default=datetime.date.today)
     
+    def __str__(self):
+        return self.title
+
     def save(self, *args, **kwargs):
         super(SOWScrum, self).save(*args, **kwargs)
+
+class MilestonesScrum(models.Model):
+    scrum = models.ForeignKey(SOWScrum, on_delete=models.CASCADE, null=True)
+    milestones = models.DateField(default=datetime.date.today)
+    milestone_description = models.CharField(max_length=128,blank=True) 
+
+    def __str__(self):
+        return self.scrum
+
+    def save(self, *args, **kwargs):
+        super(MilestonesScrum, self).save(*args, **kwargs)
+
+
+
 
 # Kanban Statement of Work database fields
 class SOWKanban(models.Model):

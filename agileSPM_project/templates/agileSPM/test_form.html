@@ -1,0 +1,17 @@
+{{ formset.management_form }}
+{{ formset.non_form_errors }}
+
+{% for milestone_form in formset.forms %}
+    {{ milestone_form }}
+
+    {% if milestone_form.nested %}
+        {{ milestone_form.nested.management_form }}
+        {{ milestone_form.nested.non_form_errors }}
+
+        {% for nested_form in milestone_form.nested.forms %}
+            {{ nested_form }}
+        {% endfor %}
+
+    {% endif %}
+
+{% endfor %}
