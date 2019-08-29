@@ -106,7 +106,7 @@ class Edit_scrum_form(UpdateView):
     template_name = 'agileSPM/edit_sow_scrum.html'
     fields = ['title','produced_by','date_project',
                     'intro','deliverables','assumptions','inScope','outScope',
-                    'backlog','sprintLength','sprint','sprintPlan','team','done',
+                    'backlog','sprintLength','sprint','team','done',
                     'review','milestones', 'milestone_description','delivery','invoice',
                     'invoice','invoice_info','amount','firstName',
                     'date_signature1','secondName','date_signature2',]
@@ -203,9 +203,6 @@ def scrum_doc(request, id):
 
 ## Mode of Delivery ##
 
-    # Sprint plan 
-    s_project.add_heading('Sprint Planning',level=1)
-    s_project.add_paragraph(user_input.sprintPlan, style=body_text_style)
     # Sprints
     para = s_project.add_paragraph('Number of Sprints:')
     para.add_run(sprints).bold = True

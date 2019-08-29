@@ -17,7 +17,6 @@ class SOWScrum(models.Model):
     backlog = models.TextField(blank=True)
     sprintLength = models.IntegerField(blank=False)
     sprint = models.IntegerField(blank=False)
-    sprintPlan = models.TextField(blank=True)
     team = models.TextField(blank=True)
     done = models.TextField(blank=True)
     review = models.TextField(blank=True)
