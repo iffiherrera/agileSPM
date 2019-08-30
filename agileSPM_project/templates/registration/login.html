@@ -1,22 +1,49 @@
 <!DOCTYPE html>
-{% extends 'agileSPM/base.html' %}
+{% extends 'agileSPM/base_agileSPM.html' %}
 {% load staticfiles %}
 
 <html>
-        {% block title_block %}
-            Login
-        {% endblock %}
+
 
 {% block import_block %}
-<link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+<link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
 <link href="{% static "css/login.css" %}" rel="stylesheet" type="text/css" />
-<!-- <link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" /> -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 
 <body>
-{% block body_block %}
+{% block body %}
+<header>
+    </header>
+ 
+    <div class="content">       
+<div class="intro">   
+    <h1><span>AgileSPM</span></h1>
+    <h2><span>Quick & Easy Statements of work.</span>
+        <br/> </h2>
+    </div>
+    <button class="main-btn" type="button">Get started</button><br/>
+    <div class="gallery">
+            <a href="{% url "scrum_form" %}">
+            <img src="{% static "images/scrum.png" %}">
+            </a>
+            <div class="desc">Scrum info here</div>
+          </div>
+          <div class="gallery">
+                <a href="{% url "scrum_form" %}">
+                <img src="{% static "images/kanban.png" %}">
+                </a>
+                <div class="desc">Kanban info here</div>
+              </div>
+              <div class="gallery">
+                    <a href="{% url "scrum_form" %}">
+                    <img src="{% static "images/scrumban.png" %}">
+                    </a>
+                    <div class="desc">Scrumban info here</div>
+                  </div>
+                </div>
+<div class="divider">
+</div>
+
 <div class="modal">
     <div class="modal-content">
             <div class="modal-header">
@@ -36,23 +63,7 @@
 </div>
 </div>
 
-<!-- <div class="modal-login">
-        <div class="modal-content-login">
-            <div class="modal-header">
-                <span class="close">&times;</span>
-                <h2>Login</h2>
 
-            <form method="POST" actio="{% url 'login' %}" >
-            {% csrf_token %}
-            <label> Username:</label>
-            <input type="text" name="username" placeholder="username"><br/>
-            <label> Password:</label>
-            <input type="text" name="password" placeholder="password"><br/>
-            <input type="submit" name="login-btn" value="Login"/>
-            </form>
-         </div>
-    </div>
-</div> -->
 {% endblock %}
 
 <div>

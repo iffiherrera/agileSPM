@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<!-- {% extends 'agileSPM/base.html' %} -->
+
+{% extends 'agileSPM/base_agileSPM.html' %}
 {% load staticfiles %}
 
 <html>
-        {% block title_block %}
-            Sign up 
-        {% endblock %}
 
 {% block import_block %}
-<link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+<link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
 <link href="{% static "css/signup.css" %}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -16,9 +13,42 @@
 
 <body>
   <div>
-{% block body_block %}
+{% block body %}
 
-<div class="modal-signup">
+        <header>
+          </header>
+       
+          <div class="content">       
+      <div class="intro">   
+          <h1><span>AgileSPM</span></h1>
+          <h2><span>Quick & Easy Statements of work.</span>
+              <br/> </h2>
+          </div>
+          <button class="main-btn" type="button">Get started</button><br/>
+          <div class="gallery">
+                  <a href="{% url "scrum_form" %}">
+                  <img src="{% static "images/scrum.png" %}">
+                  </a>
+                  <div class="desc">Scrum info here</div>
+                </div>
+                <div class="gallery">
+                      <a href="{% url "scrum_form" %}">
+                      <img src="{% static "images/kanban.png" %}">
+                      </a>
+                      <div class="desc">Kanban info here</div>
+                    </div>
+                    <div class="gallery">
+                          <a href="{% url "scrum_form" %}">
+                          <img src="{% static "images/scrumban.png" %}">
+                          </a>
+                          <div class="desc">Scrumban info here</div>
+                        </div>
+                      </div>
+      <div class="divider">
+      </div>
+
+
+      <div class="modal-signup">
     <div class="modal-content">
         <div class="modal-header">
             <span class="close">&times;</span>
@@ -34,7 +64,6 @@
             </div>
           </div>
         </div>
-
 {% endblock %}
 </div>
 <div>

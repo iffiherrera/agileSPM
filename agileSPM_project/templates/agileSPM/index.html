@@ -1,68 +1,49 @@
-<!DOCTYPE html>
-{% extends 'agileSPM/base.html' %}
-{% load staticfiles %}
+{% extends 'agileSPM/base_agileSPM.html' %}
+ {%load staticfiles %}    
 
-<html>
-        {% block title_block %}
-            Create Dynamic Statements of Work
-        {% endblock %}
-
-{% block import_block %}
-<link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
-<link href="{% static "css/index.css" %}" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-{% endblock %}
-
-<body>
-  <div>
-{% block body_block %}
-        <div class="blockIntro">
-                   
-                    <h1><span>AgileSPM</span></h1><br />
-                    <h2><span>Quick & Easy Statements of work.</span>
-                        <br/> </h2>
-                    <!-- <input type="submit" href="{% url 'login' %}" value="Start by logging in">  </h2> -->
-        </div>
-        <!-- <ul>
-            <div class="gallery">
-                    <a target="_blank" href="{% url 'scrum_form' %}">
-                      <img src="{% static 'images/scrum.png' %}"  width="200" height="200">
-                    </a>
-                    <div class="desc">Add a description of the image here</div>
-                  </div>     
-
-                  <div class="gallery">
-                    <a target="_blank" href="{% url 'scrum_form' %}">
-                      <img src="{% static 'images/kanban.png' %}"  width="200" height="200">
-                    </a>
-                    <div class="desc">Add a description of the image here</div>
-                  </div>
-                  
-                  <div class="gallery">
-                    <a target="_blank" href="{% url 'scrum_form' %}">
-                      <img src="{% static 'images/scrumban.png' %}" width="200" height="200">
-                    </a>
-                    <div class="desc">Add a description of the image here</div>
-                  </div>
-          
-            </ul>
-    <div class="blockTwo">
-                </div> -->
-
-{% endblock %}
-</div>
-{% block footer_block %}
-
-{% endblock %}
-<div>
-    {% block end_block %}
-    <!-- Jquery goes here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
-    <script src="{% static "js/jquery.js" %}"></script>
-    {% endblock %}
-    </div>
-</body>
-</html>
-
+ {% block import_block %}
+ <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ {% endblock %}
+ 
+            {% block body %}
+            <!-- Header is the cover image for the index, it requires only tags, the rest is done by CSS -->
+              <header>
+                </header>
+             
+                <div class="content">              
+            <div class="intro">   
+                <h1><span>AgileSPM</span></h1>
+                <h2><span>Quick & Easy Statements of work.</span>
+                    <br/> </h2>
+                </div>
+                <button class="main-btn" type="button">Get started</button><br/>
+                <div class="gallery">
+                        <a href="{% url "scrum_form" %}">
+                        <img src="{% static "images/scrum.png" %}">
+                        </a>
+                        <div class="desc">Scrum info here</div>
+                      </div>
+                      <div class="gallery">
+                            <a href="{% url "scrum_form" %}">
+                            <img src="{% static "images/kanban.png" %}">
+                            </a>
+                            <div class="desc">Kanban info here</div>
+                          </div>
+                          <div class="gallery">
+                                <a href="{% url "scrum_form" %}">
+                                <img src="{% static "images/scrumban.png" %}">
+                                </a>
+                                <div class="desc">Scrumban info here</div>
+                              </div>
+                            </div>
+            <div class="divider">
+            </div>
+            {% endblock %}
+           {% block end_block %}
+            <!-- Jquery & JavaScript goes here -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <script src="{% static "js/index.js" %}"></script>
+            <script src="{% static "js/jquery.js" %}"></script>
+      
+            {% endblock %}               

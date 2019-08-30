@@ -1,3 +1,13 @@
+div .formBody {
+  top: 20px;
+  text-align: center;
+  padding: 30px;
+  width: 90%;
+  margin: 4em auto;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: center;
+}
 
 .sidebar {
     margin: 0;
@@ -17,11 +27,7 @@
     padding: 16px;
     text-decoration: none;
   }
-/*    
-  .sidebar a.active {
-    background-color: #4CAF50;
-    color: white;
-  } */
+
   
   .sidebar a:hover:not(.active) {
     background-color: #f45386;
@@ -34,12 +40,6 @@
     height: auto;
     background-color: #fafafa;
   }
-  /* div.background {
-    height: 100%;
-    width: 100%;
-    background-color: #fafafa;
-  } */
-
   
   @media screen and (max-width: 700px) {
     .sidebar {

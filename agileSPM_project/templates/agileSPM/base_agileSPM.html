@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block import_block %}
+        <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        {% endblock %}
+
+        {% block title_block %}
+        <title>
+            AgileSPM - 
+        </title>
+        {% endblock %}
+    </head>
+    <body>
+      <div class="container">
+              <nav>
+                  <div class="nav-icon">
+                      <i class ="fa fa-bars fa-2x"></i>
+                  </div>
+                  <div class ="logo">
+                      <a href="{% url 'index' %}">AGILESPM</a>
+                  </div>
+                  <div class="menu">
+                      <ul>
+                          {% if user.is_authenticated %}
+                          <li><a href="{% url 'logout' %}">Logout</a></li> 
+                          {% else %}
+                          <li><a href="{% url 'register' %}">Sign Up</a></li>
+                          <li><a href="{% url 'login' %}">Login</a></li>
+                          {% endif %}
+                          <li><a href="{% url 'my_docs' %}">Documents</a></li>
+                          <li><a href="{% url 'contact' %}">Contact</a></li>
+                      </ul>
+                  </div>
+              </nav>
+
+                {% block body %}
+  <!-- Page specific content -->
+                {% endblock %}
+    
+{% block footer_block %} 
+<!-- Footer -->
+        <footer class="footer">
+        <div class="contain">
+                <div class="col">
+                  <h1>AgileSPM</h1>
+                  <ul>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url "logout" %}">Logout</a></li> 
+                    {% else %}
+                    <li><a href="{% url "register" %}">Sign Up</a></li> 
+                    <li><a href="{% url "login" %}">Login</a></li> 
+                    {% endif %}
+                    <li><a href="{% url "index" %}">Home</a></li> 
+                    <li><a href="{% url "my_docs" %}">My Docs</a></li>
+                    <li><a href="{% url "contact" %}">Contact</a></li> 
+                  </ul>
+                </div>
+                <div class="col">
+                  <h1>Documents</h1>
+                  <ul>
+                    <li><a href="{% url "scrum_form" %}">Scrum Project</a></li> 
+                    <li><a href="{% url "index" %}">Kanban Project</a></li> 
+                    <li><a href="{% url "index" %}">Scrumban Project</a></li> 
+
+                  </ul>
+                </div>
+              </div>  
+            </div>
+</footer>
+{% endblock %}
+      </div>
+  
+      {% block end_block %}
+      <!-- Jquery & JavaScript goes here -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="{% static "js/index.js" %}"></script>
+      <script src="{% static "js/jquery.js" %}"></script>
+
+      {% endblock %}
+    </body>
+</html>

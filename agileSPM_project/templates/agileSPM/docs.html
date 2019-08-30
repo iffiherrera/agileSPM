@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-{% extends 'agileSPM/base.html' %}
+{% extends 'agileSPM/base_agileSPM.html' %}
 {% load staticfiles %}
 
 <html>
-        {% block title_block %}
-            My Documents
-        {% endblock %}
+
 
 {% block import_block %}
-<link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css" />
+<link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
 <link href="{% static "css/docs.css" %}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -17,7 +15,7 @@
 
 <body>
     <div>
-{% block body_block %}
+{% block body %}
 <div class="doc_page">
 
     <div class="doc">
