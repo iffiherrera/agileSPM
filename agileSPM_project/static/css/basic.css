@@ -9,6 +9,15 @@ body {
     font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
+a, a:link, a:visited {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #fafafa;
+}
+
 .logo {
     position: absolute;
     float: left;

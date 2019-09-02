@@ -3,6 +3,13 @@
 {% load staticfiles %}
 
 <html>
+    <head>
+            {% block title_block %}
+            <title>
+               AgileSPM - My documents
+            </title>
+            {% endblock %}
+    </head>
 
 
 {% block import_block %}
@@ -22,32 +29,67 @@
     <a href="{% url 'scrum_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a> 
     <p id="text-para"> Create Scrum Document</p> </div>
     <div class="doc">
-    <a href="{% url 'scrum_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a>
+    <a href="{% url 'kanban_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a>
     <p id="text-para"> Create Kanban Document</p> </div>
     <div class="doc">
-    <a href="{% url 'scrum_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a>
+    <a href="{% url 'scrumban_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a>
          <p id="text-para"> Create Scrumban Document</p></div>
     <div class="hr"></div>
+
     <div id="title_doc"> <h1>Your documents</h1></div>
-   
+            <!-- Scrum documents -->
             {% for forms in user_scrum_forms %}
               
                 <div class="card">
-                <a href="{% url 'edit_scrum_form' forms.id %}"><i class="fas fa-file" id="file"></i></a>
+                <a href="{% url 'scrum_update' forms.id %}"><i class="fas fa-file" id="file"></i></a>
                     <p id="text-btn"> {{ forms.title }}</p>
-                    <button class="btn" id="duplicate-btn" data-link="{% url 'edit_scrum_form' forms.id %}" onclick="duplicateURL()"><i class="fas fa-download"></i> Save</button>
-                    <button class="btn" id="edit-btn" href="{% url 'edit_scrum_form' forms.id %}" onclick="editURL()"><i class="fas fa-edit"></i> Edit</button>
-                    <button class="btn" id="delete-btn" href="{% url 'sow_form_delete' forms.id %}" onclick="deleteURL()"><i class="fa fa-trash"></i> Delete</button>
+                    <button type="button" class="btn" id="duplicate-btn" data-link='{% url 'scrum_update' forms.id %}'><i class="fas fa-copy"></i> Copy</button>
+                    <button type="button" class="btn" id="edit-btn" data-link='{% url 'scrum_update' forms.id %}'><i class="fas fa-edit"></i> Edit</button>
+                    <br/>
+                    <button type="button" class="btn" id="delete-btn" data-link='{% url 'scrum_form_delete' forms.id %}'><i class="fa fa-trash"></i> Delete</button>
+                    <button type="button" class="btn" id="save-btn" data-link='{% url 'scrum_doc' forms.id %}'><i class="fa fa-download"></i> Save</button>
                 </div> 
-            
+    
             {% endfor %}
+
+                       <!-- Kanban documents -->
+                       {% for form_kanban in user_kanban_forms %}
+              
+                       <div class="card">
+                       <a href="{% url 'kanban_update' form_kanban.id %}"><i class="fas fa-file" id="file"></i></a>
+                           <p id="text-btn"> {{ form_kanban.title }}</p>
+                           <button type="button" class="btn" id="duplicate-btn-kanban" data-link='{% url 'kanban_update' form_kanban.id %}'><i class="fas fa-copy"></i> Copy</button>
+                           <button type="button" class="btn" id="edit-btn-kanban" data-link='{% url 'kanban_update' form_kanban.id %}'><i class="fas fa-edit"></i> Edit</button>
+                           <br/>
+                           <button type="button" class="btn" id="delete-btn-kanban" data-link='{% url 'kanban_form_delete' form_kanban.id %}'><i class="fa fa-trash"></i> Delete</button>
+                           <button type="button" class="btn" id="save-btn-kanban" data-link='{% url 'kanban_doc' form_kanban.id %}'><i class="fa fa-download"></i> Save</button>
+                       </div> 
+           
+                   {% endfor %}
+
+                              <!-- Scrumban documents -->
+            {% for form_sb in user_scrumban_forms %}
+              
+            <div class="card">
+            <a href="{% url 'scrumban_update' form_sb.id %}"><i class="fas fa-file" id="file"></i></a>
+                <p id="text-btn"> {{ form_sb.title }}</p>
+                <button type="button" class="btn" id="duplicate-btn-sb" data-link='{% url 'scrumban_update' form_sb.id %}'><i class="fas fa-copy"></i> Copy</button>
+                <button type="button" class="btn" id="edit-btn-sb" data-link='{% url 'scrumban_update' form_sb.id %}'><i class="fas fa-edit"></i> Edit</button>
+                <br/>
+                <button type="button" class="btn" id="delete-btn-sb" data-link='{% url 'scrumban_form_delete' form_sb.id %}'><i class="fa fa-trash"></i> Delete</button>
+                <button type="button" class="btn" id="save-btn-sb" data-link='{% url 'scrumban_doc' form_sb.id %}'><i class="fa fa-download"></i> Save</button>
+            </div> 
+
+        {% endfor %}
+
         </div>
  
 {% endblock %}
     </div>
 
-{% block end_block%}
-<script src="{% static "js/docs.js" %}"></script>
+{% block end_block %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{% static "js/my_docs.js" %}"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 {% endblock %}
 </body>

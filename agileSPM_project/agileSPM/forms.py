@@ -1,10 +1,8 @@
 from django import forms
-from django.forms import ModelForm, formset_factory
+from django.forms import ModelForm, formset_factory, modelformset_factory
 from .models import SOWScrum, SOWKanban, SOWScrumban
 from django.contrib.auth.models import User
-from bootstrap_modal_forms.forms import BSModalForm
 from django.contrib.auth.forms import UserCreationForm
-from bootstrap_modal_forms.mixins import PopRequestMixin, CreateUpdateAjaxMixin
 import datetime
 from django.views.generic.edit import UpdateView
 
@@ -42,17 +40,6 @@ class RegisterForm(UserCreationForm):
             user.save()
         
         return user
-
-class SignUpModalForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'forms', 'id':'username'}), help_text='', required=True)
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'forms', 'id':'email'}),help_text='', required=True)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'forms', 'id':'password1'}),help_text='', required=True, label='Password')
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'forms', 'id':'password2'}),help_text='', required=True, label='Repeat Password')
-
-    class Meta: 
-        model = User
-        fields = ['username','email','password1','password2']
-
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -97,22 +84,6 @@ class SOWScrumForm(forms.ModelForm):
                     'invoice','invoice_info','amount','firstName',
                     'date_signature1','secondName','date_signature2',]
 
-
-# Editable form from User's collection of finished and unfinished documents
-class EditScrumForm(forms.Form):
-
-    class Meta: 
-        model = SOWScrum
-        fields = ['title','produced_by','date_project',
-                    'intro','deliverables','assumptions','inScope','outScope',
-                    'backlog','sprintLength','sprint','team','done',
-                    'review','milestones', 'milestone_description','delivery','invoice',
-                    'invoice','invoice_info','amount','firstName',
-                    'date_signature1','secondName','date_signature2',]  
-
-
-
-
 ## Model form used to get input from user to populate specific document.
 class SOWKanbanForm(forms.ModelForm):
     required_css_class = 'required'
@@ -149,20 +120,6 @@ class SOWKanbanForm(forms.ModelForm):
                     'delivery','invoice',
                     'invoice','invoice_info','amount','firstName',
                     'date_signature1','secondName','date_signature2',]
-
-# Editable form from User's collection of finished and unfinished documents
-class EditKanbanForm(forms.Form):
-
-    class Meta: 
-        model = SOWKanban
-        fields = ['title','produced_by','date_project',
-                    'intro','deliverables','assumptions','inScope','outScope',
-                    'backlog', 'plan','columns','column_labels', 'wipLimit',
-                    'delivery','invoice',
-                    'invoice','invoice_info','amount','firstName',
-                    'date_signature1','secondName','date_signature2',] 
-
-
   
 ## Model form used to get input from user to populate specific document.
 class SOWScrumbanForm(forms.ModelForm):
@@ -204,14 +161,3 @@ class SOWScrumbanForm(forms.ModelForm):
                     'invoice','invoice_info','amount','firstName',
                     'date_signature1','secondName','date_signature2',]
 
-# Editable form from User's collection of finished and unfinished documents
-class EditScrumbanForm(forms.Form):
-
-    class Meta: 
-        model = SOWScrumban
-        fields = ['title','produced_by','date_project',
-                    'intro','deliverables','assumptions','inScope','outScope',
-                    'backlog', 'plan','iterations','wipLimit','team',
-                    'review','milestones', 'milestone_description','delivery','invoice',
-                    'invoice','invoice_info','amount','firstName',
-                    'date_signature1','secondName','date_signature2',]

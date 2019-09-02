@@ -3,24 +3,31 @@
 {% load staticfiles %}
 {% load i18n %}
 <html>
-    {% block title_block %}
-        Scrum Project
-    {% endblock %}
-
+        <head>
+                {% block title_block %}
+                <title>
+                   AgileSPM - Kanban document
+                </title>
+                {% endblock %}
+        </head>
+ 
     {% block import_block %}
     <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
     <link href="{% static "css/sow.css" %}" rel="stylesheet" type="text/css" />
     {% endblock %}
 
-{% block body_block %}
-<body>
+
+
+    {% block body %}
+<div class="formBody">
+
 <div class="sidebar">
         <a href="#titleID">Cover Information</a>
         <a href="#introID">Introduction</a>
         <a href="#deliverablesID">Ojectives</a>
         <a href="#scopeID">Scope</a>
         <a href="#backlogID">Tasks</a>
-        <a href="#lengthID">Scrum delivery</a>
+        <a href="#lengthID">Kanban delivery</a>
         <a href="#milestonesID">Timescales</a>
         <a href="#invoiceID">Project Cost</a>
         <a href="#nameoneID">Acceptance</a>
@@ -28,15 +35,17 @@
       </div>
 
 <div class="formBox">
-<form id="SOWForm" method="POST">
+<form id="SOWForm" method="POST" value="SAVE">
    
     {% csrf_token %}
+   
     {{ form.as_p }}
 
-    <input type="submit" value="{% trans "UPDATE" %}" />
+    <input type="submit" value="{% trans "SAVE" %}" />
 
 </form>
 </div>
-</body>
+</div>
+
 {% endblock %}
 </html>

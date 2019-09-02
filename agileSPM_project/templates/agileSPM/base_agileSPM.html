@@ -2,17 +2,17 @@
 {% load staticfiles %}
 <html>
     <head>
+        {% block title_block %}
+        <title>
+            AgileSPM - easy statements of work
+        </title>
+        {% endblock %}
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block import_block %}
         <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        {% endblock %}
-
-        {% block title_block %}
-        <title>
-            AgileSPM - 
-        </title>
-        {% endblock %}
+        {% endblock %}    
     </head>
     <body>
       <div class="container">
@@ -32,7 +32,6 @@
                           <li><a href="{% url 'login' %}">Login</a></li>
                           {% endif %}
                           <li><a href="{% url 'my_docs' %}">Documents</a></li>
-                          <li><a href="{% url 'contact' %}">Contact</a></li>
                       </ul>
                   </div>
               </nav>
@@ -56,15 +55,14 @@
                     {% endif %}
                     <li><a href="{% url "index" %}">Home</a></li> 
                     <li><a href="{% url "my_docs" %}">My Docs</a></li>
-                    <li><a href="{% url "contact" %}">Contact</a></li> 
                   </ul>
                 </div>
                 <div class="col">
                   <h1>Documents</h1>
                   <ul>
                     <li><a href="{% url "scrum_form" %}">Scrum Project</a></li> 
-                    <li><a href="{% url "index" %}">Kanban Project</a></li> 
-                    <li><a href="{% url "index" %}">Scrumban Project</a></li> 
+                    <li><a href="{% url "kanban_form" %}">Kanban Project</a></li> 
+                    <li><a href="{% url "scrumban_form" %}">Scrumban Project</a></li> 
 
                   </ul>
                 </div>

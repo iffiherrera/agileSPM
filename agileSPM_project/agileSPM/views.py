@@ -1,30 +1,18 @@
 from django.shortcuts import render, reverse, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from .models import SOWScrum, SOWKanban, SOWScrumban, User
-from .forms import SOWScrumForm, EditScrumForm, SignUpModalForm, RegisterForm, SOWKanbanForm, SOWScrumbanForm
-from formtools.wizard.views import WizardView, SessionWizardView
+from .forms import SOWScrumForm, RegisterForm, SOWKanbanForm, SOWScrumbanForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 import datetime
 from django.urls import reverse_lazy
-from bootstrap_modal_forms.generic import BSModalCreateView
-from django.views.generic.edit import UpdateView, CreateView, DeleteView, FormView
-
-
-def test(request):
-    return render(request, 'agileSPM/base_agileSPM.html',{})
+from django.views.generic.edit import DeleteView
 
 def contact(request):
     return render(request, 'agileSPM/base_agileSPM.html',{})
-
-# BS modal sign up pop up 
-class ModalSignUpView(BSModalCreateView):
-    form_class = SignUpModalForm
-    template_name = 'agileSPM/register.html'
-    success_url = reverse_lazy('my_docs')
 
 def register(request):
 
@@ -41,8 +29,16 @@ def register(request):
     else:
         register_form = RegisterForm()
 
-    return render(request,'agileSPM/register.html', {'register_form' : register_form})
+    return render(request,'agileSPM/registration/register.html', {'register_form' : register_form})
 
+# Home view 
+def index(request):
+    user_form = RegisterForm()
+    context_dict = {
+        'user': request.user,
+        'user_form': user_form,
+    }
+    return render(request, 'agileSPM/index.html', context=context_dict)
 
 # Scrum form 
 @login_required
@@ -50,7 +46,7 @@ def scrumForm(request):
     form = SOWScrumForm()
 
     if request.method == 'POST':
-        form = SOWScrumForm(data=request.POST)
+        form = SOWScrumForm(data=request.POST or None)
 
         if form.is_valid(): 
             form = form.save(commit=False)
@@ -66,20 +62,46 @@ def scrumForm(request):
     
     else:
         form = SOWScrumForm()
-    
+
     context_dict = {'user': request.user,
                     'form': form}
 
-    return render(request,'agileSPM/full_form.html', context=context_dict)
+    return render(request,'agileSPM/scrum/full_form.html', context=context_dict)
 
 # Successful completion of form view.
 def success_scrum(request, id):
     complete_scrum_forms = SOWScrum.objects.filter(author=request.user)
     context_dict = {'id': id,
-                    'complete_scrum_forms': complete_scrum_forms}
+                    'complete_scrum_forms': complete_scrum_forms,}
 
-    return render(request,'agileSPM/wizard/done.html', context=context_dict)
+    return render(request,'agileSPM/done.html', context=context_dict)
 
+
+def scrumForm_update(request, id):
+    instance = SOWScrum.objects.get(id=id)
+    form = SOWScrumForm(data=request.POST or None, instance=instance)
+    edited_scrum_forms = SOWScrum.objects.filter(author=request.user)
+
+    if form.is_valid():
+        instance = form.save(commit=False)
+        form.save()
+        # id = form.id
+        print('id edited:',id)
+        return redirect('success_scrum', id=id)
+
+    context_dict = {
+        'id': id,
+        'instance': instance,
+        'scrum_form': edited_scrum_forms,
+        'form':form}
+
+    return render(request, 'agileSPM/scrum/full_form.html', context=context_dict)
+   
+class DeleteScrumForm(DeleteView):
+    model = SOWScrum
+    template_name = 'agileSPM/delete_doc.html'
+    success_url = reverse_lazy('my_docs')
+           
 @login_required
 def kanbanForm(request):
     form = SOWKanbanForm()
@@ -105,7 +127,7 @@ def kanbanForm(request):
     context_dict = {'user': request.user,
                     'form': form}
 
-    return render(request,'agileSPM/kanban_form.html', context=context_dict)
+    return render(request,'agileSPM/kanban/kanban_form.html', context=context_dict)
 
 # Successful completion of form view.
 def success_kanban(request, id):
@@ -113,8 +135,31 @@ def success_kanban(request, id):
     context_dict = {'id': id,
                     'complete_scrum_forms': complete_kanban_forms}
 
-    return render(request,'agileSPM/wizard/done.html', context=context_dict)
+    return render(request,'agileSPM/kanban/done_kanban.html', context=context_dict)
 
+def kanbanForm_update(request, id):
+    instance = SOWKanban.objects.get(id=id)
+    form = SOWKanbanForm(data=request.POST or None, instance=instance)
+    edited_kanban_forms = SOWScrum.objects.filter(author=request.user)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        form.save()
+        # id = form.id
+        print('id edited:',id)
+        return redirect('success_kanban', id=id)
+
+    context_dict = {
+        'id': id,
+        'instance': instance,
+        'kanban_form': edited_kanban_forms,
+        'form':form}
+
+    return render(request, 'agileSPM/kanban/kanban_form.html', context=context_dict)
+
+class DeleteKanbanForm(DeleteView):
+    model = SOWKanban
+    template_name = 'agileSPM/delete_doc.html'
+    success_url = reverse_lazy('my_docs')
 
 @login_required
 def scrumbanForm(request):
@@ -141,7 +186,7 @@ def scrumbanForm(request):
     context_dict = {'user': request.user,
                     'form': form}
 
-    return render(request,'agileSPM/scrumban_form.html', context=context_dict)
+    return render(request,'agileSPM/scrumban/scrumban_form.html', context=context_dict)
 
 # Successful completion of form view.
 def success_scrumban(request, id):
@@ -149,18 +194,31 @@ def success_scrumban(request, id):
     context_dict = {'id': id,
                     'complete_scrumban_forms': complete_scrumban_forms}
 
-    return render(request,'agileSPM/wizard/done.html', context=context_dict)
+    return render(request,'agileSPM/scrumban/done_scrumban.html', context=context_dict)
 
+def scrumbanForm_update(request, id):
+    instance = SOWScrumban.objects.get(id=id)
+    form = SOWScrumbanForm(data=request.POST or None, instance=instance)
+    edited_scrumban_forms = SOWScrumban.objects.filter(author=request.user)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        form.save()
+        # id = form.id
+        print('id edited:',id)
+        return redirect('success_scrumban', id=id)
 
-
-# Home view 
-def index(request):
-    user_form = RegisterForm()
     context_dict = {
-        'user': request.user,
-        'user_form': user_form,
-    }
-    return render(request, 'agileSPM/index.html', context=context_dict)
+        'id': id,
+        'instance': instance,
+        'scrumban_form': edited_scrumban_forms,
+        'form':form}
+
+    return render(request, 'agileSPM/scrumban/scrumban_form.html', context=context_dict)
+
+class DeleteScrumbanForm(DeleteView):
+    model = SOWScrumban
+    template_name = 'agileSPM/delete_doc.html'
+    success_url = reverse_lazy('my_docs')
 
 # User account view 
 @login_required
@@ -183,108 +241,6 @@ def my_docs(request):
     print('user',request.user)
 
     return render(request, 'agileSPM/docs.html', context=context_dict)
-
-
-## View to allow user to edit existing data populated in the specific document id.
-class Edit_scrum_form(UpdateView):
-
-    model = SOWScrum
-    template_name = 'agileSPM/edit_sow_scrum.html'
-    fields = ['title','produced_by','date_project',
-                    'intro','deliverables','assumptions','inScope','outScope',
-                    'backlog','sprintLength','sprint','team','done',
-                    'review','milestones', 'milestone_description','delivery','invoice',
-                    'invoice','invoice_info','amount','firstName',
-                    'date_signature1','secondName','date_signature2',]
-
-    def form_valid(self, form):
-        print('object',form)
-        self.object = form.save(commit=False)
-        self.object.save()
-        id = form.auto_id
-        return redirect('edit_success_scrum', id=id)
-        # print('Edit successful', pk)
-       
-        return super().form_valid(form)
-
-def edit_success_scrum(request, id):
-    edited_scrum_forms = SOWScrum.objects.filter(author=request.user)
-    context_dict = {'id': id,
-                    'edited_scrum_forms': edited_scrum_forms}
-
-    return render(request,'agileSPM/edit.html', context=context_dict)
-
-class Delete_scrum_form(DeleteView):
-    model = SOWScrum
-    success_url = reverse_lazy('agileSPM/my_docs')
-
-
-
-## View to allow user to edit existing data populated in the specific document id.
-class Edit_kanban_form(UpdateView):
-
-    model = SOWKanban
-    template_name = 'agileSPM/edit_sow_kanban.html'
-    fields = ['title','produced_by','date_project',
-                    'intro','deliverables','assumptions','inScope','outScope',
-                    'backlog', 'plan','columns','column_labels', 'wipLimit',
-                    'delivery','invoice',
-                    'invoice','invoice_info','amount','firstName',
-                    'date_signature1','secondName','date_signature2',]
-
-    def form_valid(self, form):
-        print('object',form)
-        self.object = form.save(commit=False)
-        self.object.save()
-        id = form.auto_id
-        return redirect('edit_success_kanban', id=id)
-        # print('Edit successful', pk)
-       
-        return super().form_valid(form)
-
-def edit_success_kanban(request, id):
-    edited_kanban_forms = SOWKanban.objects.filter(author=request.user)
-    context_dict = {'id': id,
-                    'edited_kanban_forms': edited_kanban_forms}
-
-    return render(request,'agileSPM/edit_kanban.html', context=context_dict)
-
-class Delete_kanban_form(DeleteView):
-    model = SOWKanban
-    success_url = reverse_lazy('agileSPM/my_docs')
-
-## View to allow user to edit existing data populated in the specific document id.
-class Edit_scrumban_form(UpdateView):
-
-    model = SOWScrumban
-    template_name = 'agileSPM/edit_sow_scrumban.html'
-    fields = ['title','produced_by','date_project',
-                    'intro','deliverables','assumptions','inScope','outScope',
-                    'backlog', 'plan','iterations','wipLimit','team',
-                    'review','milestones', 'milestone_description','delivery','invoice',
-                    'invoice','invoice_info','amount','firstName',
-                    'date_signature1','secondName','date_signature2',]
-
-    def form_valid(self, form):
-        print('object',form)
-        self.object = form.save(commit=False)
-        self.object.save()
-        id = form.auto_id
-        return redirect('edit_success_scrumban', id=id)
-        # print('Edit successful', pk)
-       
-        return super().form_valid(form)
-
-def edit_success_scrumban(request, id):
-    edited_scrumban_forms = SOWScrumban.objects.filter(author=request.user)
-    context_dict = {'id': id,
-                    'edited_scrumban_forms': edited_scrumban_forms}
-
-    return render(request,'agileSPM/edit_scrumban.html', context=context_dict)
-
-class Delete_scrumban_form(DeleteView):
-    model = SOWScrumban
-    success_url = reverse_lazy('my_docs')
   
 # Scrum Document creation using docx-Python API
 def scrum_doc(request, id):
@@ -380,6 +336,10 @@ def scrum_doc(request, id):
     s_project.add_heading('Milestones',level=1)
     s_project.add_paragraph(milestones, style=list_bullet_style)
     s_project.add_paragraph(user_input.milestone_description, style=body_text_style)
+
+
+    #### Code awaiting input from milestone model formset, commented out as was not able to complete it in time. #####
+
     # milestone_table = s_project.add_table(rows=3, cols=2)
     # milestone_table.style = 'LightShading-Accent1'
     # header_cells = milestone_table.rows[0].cells
@@ -400,6 +360,10 @@ def scrum_doc(request, id):
     s_project.add_heading('Invoice schedule',level=1)
     s_project.add_paragraph(invoice, style=body_text_style)
     s_project.add_paragraph(user_input.invoice_info, style=body_text_style)
+
+
+    #### Code awaiting input from invoice model formset, commented out as was not able to complete it in time. #####
+
     # invoice_table = s_project.add_table(rows=3, cols=3)
     # invoice_table.style = 'LightShading-Accent1'
     # header_cells = invoice_table.rows[0].cells
@@ -528,6 +492,8 @@ def kanban_doc(request, id):
     k_project.add_paragraph(invoice, style=body_text_style)
     k_project.add_paragraph(user_input.invoice_info, style=body_text_style)
     
+    #### Code awaiting input from invoice model formset, commented out as was not able to complete it in time. #####
+
     # invoice_table = k_project.add_table(rows=3, cols=3)
     # invoice_table.style = 'LightShading-Accent1'
     # header_cells = invoice_table.rows[0].cells
@@ -590,7 +556,6 @@ def scrumban_doc(request,id):
     date_signature2 = str(user_input.date_signature2)
 
     # Casting int values to string
-    columns = str(user_input.columns)
     wipLimit = str(user_input.wipLimit)
     invoice = str(user_input.invoice)
     iterations = str(user_input.iterations)
@@ -660,6 +625,9 @@ def scrumban_doc(request,id):
     sb_project.add_heading('Milestones',level=1)
     sb_project.add_paragraph(milestones, style=list_bullet_style)
     sb_project.add_paragraph(user_input.milestone_description, style=body_text_style)
+
+    #### Code awaiting input from milestone model formset, commented out as was not able to complete it in time. #####
+
     # milestone_table = sb_project.add_table(rows=3, cols=2)
     # milestone_table.style = 'LightShading-Accent1'
     # header_cells = milestone_table.rows[0].cells
@@ -671,6 +639,8 @@ def scrumban_doc(request,id):
     #     for cell in rows.cells:
     #         print(cell.text)
 
+
+
    # Delivery
     para = sb_project.add_paragraph('Delivery date:')
     para.add_run(delivery).bold = True
@@ -681,6 +651,9 @@ def scrumban_doc(request,id):
     sb_project.add_heading('Invoice schedule',level=1)
     sb_project.add_paragraph(invoice, style=body_text_style)
     sb_project.add_paragraph(user_input.invoice_info, style=body_text_style)
+
+    #### Code awaiting input from invoice model formset, commented out as was not able to complete it in time. #####
+
     # invoice_table = sb_project.add_table(rows=3, cols=3)
     # invoice_table.style = 'LightShading-Accent1'
     # header_cells = invoice_table.rows[0].cells
@@ -692,6 +665,8 @@ def scrumban_doc(request,id):
     # for row in table.rows:
     #     for cell in rows.cells:
     #         print(cell.text)
+
+
 
 ## Acceptance ##
 

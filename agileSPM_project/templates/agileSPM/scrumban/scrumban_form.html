@@ -1,8 +1,14 @@
-
 {% extends 'agileSPM/base_agileSPM.html' %}
 {% load staticfiles %}
 {% load i18n %}
 <html>
+        <head>
+                {% block title_block %}
+                <title>
+                   AgileSPM - Scrumban document
+                </title>
+                {% endblock %}
+        </head>
  
     {% block import_block %}
     <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
@@ -20,7 +26,7 @@
         <a href="#deliverablesID">Ojectives</a>
         <a href="#scopeID">Scope</a>
         <a href="#backlogID">Tasks</a>
-        <a href="#lengthID">Kanban delivery</a>
+        <a href="#lengthID">Scrum delivery</a>
         <a href="#milestonesID">Timescales</a>
         <a href="#invoiceID">Project Cost</a>
         <a href="#nameoneID">Acceptance</a>
