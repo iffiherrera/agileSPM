@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% extends 'agileSPM/base_agileSPM.html' %}
+{% load staticfiles %}
+
+<html>
+        <head>
+                {% block title_block %}
+                <title>
+                   AgileSPM - Completed Kanban document
+                </title>
+                {% endblock %}
+        </head>
+
+{% block import_block %}
+<link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
+<link href="{% static "css/done.css" %}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% endblock %}
+
+<body>
+{% block body %}
+<div class="success-content">
+
+                <br/>
+    
+                <i class="fas fa-check" id="check"></i>
+                <p>Your document was completed</p>
+              
+                <button type="button" class="download-kanban-btn" data-link='{% url "kanban_doc" id %}'><i class="fas fa-file-word"></i> Download</button>
+                <button type="button" class="doc-kanban-btn" data-link='{% url "my_docs" %}'><i class="fas fa-home"></i> My Docs</button>
+
+</div>
+{% endblock %}
+
+{% block end_block%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{% static "js/done_page.js" %}"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+{% endblock %}
+</body>

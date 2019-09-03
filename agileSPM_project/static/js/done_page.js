@@ -29,8 +29,8 @@ $(document).ready(function(){
 
 // Document button 
 $(document).ready(function(){
-    $("#doc-kanban-btn").click(function(){ 
-        var url = $("#doc-kanban-btn").attr("data-link");
+    $(".doc-kanban-btn").click(function(){ 
+        var url = $(".doc-kanban-btn").attr("data-link");
         window.location = url;
     });
 });
@@ -40,16 +40,16 @@ $(document).ready(function(){
 
 // Download button 
 $(document).ready(function(){
-    $("#download-scrumban-btn").click(function(){ 
-        var url = $("#download-scrumban-btn").attr("data-link");
+    $(".download-scrumban-btn").click(function(){ 
+        var url = $(".download-scrumban-btn").attr("data-link");
         window.location = url;
     });
 });
 
 // Document button 
 $(document).ready(function(){
-    $("#doc-scrumban-btn").click(function(){ 
-        var url = $("#doc-scrumban--btn").attr("data-link");
+    $(".doc-scrumban-btn").click(function(){ 
+        var url = $(".doc-scrumban-btn").attr("data-link");
         window.location = url;
     });
 });

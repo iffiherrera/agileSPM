@@ -6,7 +6,7 @@
         <head>
                 {% block title_block %}
                 <title>
-                   AgileSPM - Completed Scrumban document
+                   AgileSPM - Completed Scrum document
                 </title>
                 {% endblock %}
         </head>
@@ -28,8 +28,8 @@
                 <i class="fas fa-check" id="check"></i>
                 <p>Your document was completed</p>
               
-                <button type="button" class="download-scrumban-btn" data-link='{% url "scrumban_doc" id %}'><i class="fas fa-file-word"></i> Download</button>
-                <button type="button" class="doc-scrumban-btn" data-link="{% url 'my_docs' %}"><i class="fas fa-home"></i> My Docs</button>
+                <button type="button" class="download-btn" data-link='{% url "scrum_doc" id %}'><i class="fas fa-file-word"></i> Download</button>
+                <button type="button" class="doc-btn" data-link='{% url "my_docs" %}'><i class="fas fa-home"></i> My Docs</button>
 
 </div>
 {% endblock %}

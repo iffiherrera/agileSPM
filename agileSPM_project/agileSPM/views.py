@@ -46,16 +46,16 @@ def scrumForm(request):
     form = SOWScrumForm()
 
     if request.method == 'POST':
-        form = SOWScrumForm(data=request.POST or None)
+        form = SOWScrumForm(data=request.POST or None) 
 
         if form.is_valid(): 
             form = form.save(commit=False)
             form.author = request.user
-            print('user', request.user)
+            # print('user', request.user)
             form.save()
             id = form.id
-            print('id created:', id)
-            return redirect('success_scrum', id=id)
+            # print('id created:', id)
+            return redirect('scrum_success', id=id)
 
         else:
             print(form.errors)
@@ -68,14 +68,14 @@ def scrumForm(request):
 
     return render(request,'agileSPM/scrum/full_form.html', context=context_dict)
 
+
 # Successful completion of form view.
-def success_scrum(request, id):
+def scrum_success(request, id):
     complete_scrum_forms = SOWScrum.objects.filter(author=request.user)
     context_dict = {'id': id,
-                    'complete_scrum_forms': complete_scrum_forms,}
+                    'complete_scrum_forms': complete_scrum_forms}
 
-    return render(request,'agileSPM/done.html', context=context_dict)
-
+    return render(request,'agileSPM/scrum/done_scrum.html', context=context_dict)
 
 def scrumForm_update(request, id):
     instance = SOWScrum.objects.get(id=id)
@@ -87,7 +87,7 @@ def scrumForm_update(request, id):
         form.save()
         # id = form.id
         print('id edited:',id)
-        return redirect('success_scrum', id=id)
+        return redirect('scrum_success', id=id)
 
     context_dict = {
         'id': id,
@@ -112,10 +112,10 @@ def kanbanForm(request):
         if form.is_valid(): 
             form = form.save(commit=False)
             form.author = request.user
-            print('user', request.user)
+            # print('user', request.user)
             form.save()
             id = form.id
-            print('id created:', id)
+            # print('id created:', id)
             return redirect('success_kanban', id=id)
 
         else:
@@ -133,7 +133,7 @@ def kanbanForm(request):
 def success_kanban(request, id):
     complete_kanban_forms = SOWKanban.objects.filter(author=request.user)
     context_dict = {'id': id,
-                    'complete_scrum_forms': complete_kanban_forms}
+                    'complete_kanban_forms': complete_kanban_forms}
 
     return render(request,'agileSPM/kanban/done_kanban.html', context=context_dict)
 

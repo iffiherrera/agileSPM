@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from django.urls import path
 from agileSPM import views
-from .views import scrumForm, scrumForm_update, DeleteScrumForm, DeleteKanbanForm, DeleteScrumbanForm
-from .views import kanbanForm, scrumbanForm, kanbanForm_update, scrumbanForm_update, success_scrum, success_kanban, success_scrumban
+from .views import scrumForm, scrumForm_update, DeleteScrumForm, DeleteKanbanForm, DeleteScrumbanForm, scrum_success
+from .views import kanbanForm, scrumbanForm, kanbanForm_update, scrumbanForm_update, success_kanban, success_scrumban
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
@@ -21,7 +21,7 @@ urlpatterns = [
     path('scrum_form//delete/<int:pk>/', DeleteScrumForm.as_view(), name='scrum_form_delete'),
     path('scrum_form/update/<int:id>/', views.scrumForm_update, name='scrum_update'),
     path('scrum_doc/<int:id>/', views.scrum_doc, name='scrum_doc'),
-    path('scrum_success/<int:id>/', views.success_scrum, name='success_scrum'),
+    path('scrum_success/<int:id>/', views.scrum_success, name='scrum_success'),
     # path('scrum_form/edit/<int:pk>/', Edit_scrum_form.as_view(), name="edit_scrum_form"),
     # path('edit_success_scrum/<int:id>/', views.edit_success_scrum, name='edit_success_scrum'),
     

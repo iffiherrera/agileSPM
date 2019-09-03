@@ -1,12 +1,23 @@
-.done-content {
-    display: flex;
-    background-color: #fafafa;
-    width: 100%;
+
+.success-content{
+    text-align: center;
     height: 600px;
+    width: 100%;
+    background-color: #fafafa;
+    padding: 100px 30px 30px 30px;
 }
 
-#download {
+.buttons-done {
+    text-align: center;
+    height: 500px;
+    width: 500px;
+    color: black;
+    border: 1px;
+}
+
+#check {
     font-size: 150px;
-    color: #f45386;
+    color:  #1e90ff;
     float: center;
+  
 }
