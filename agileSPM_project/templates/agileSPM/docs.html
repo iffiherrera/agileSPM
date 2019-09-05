@@ -41,6 +41,7 @@
             {% for forms in user_scrum_forms %}
               
                 <div class="card">
+                    <p>Scrum</p>
                 <a href="{% url 'scrum_update' forms.id %}"><i class="fas fa-file" id="file"></i></a>
                     <p id="text-btn"> {{ forms.title }}</p>
                     <button type="button" class="btn" id="duplicate-btn" data-link='{% url 'scrum_update' forms.id %}'><i class="fas fa-copy"></i> Copy</button>
@@ -56,6 +57,7 @@
                        {% for form_kanban in user_kanban_forms %}
               
                        <div class="card">
+                            <p>Kanban</p>
                        <a href="{% url 'kanban_update' form_kanban.id %}"><i class="fas fa-file" id="file"></i></a>
                            <p id="text-btn"> {{ form_kanban.title }}</p>
                            <button type="button" class="btn" id="duplicate-btn-kanban" data-link='{% url 'kanban_update' form_kanban.id %}'><i class="fas fa-copy"></i> Copy</button>
@@ -71,6 +73,7 @@
             {% for form_sb in user_scrumban_forms %}
               
             <div class="card">
+                    <p>Scrumban</p>
             <a href="{% url 'scrumban_update' form_sb.id %}"><i class="fas fa-file" id="file"></i></a>
                 <p id="text-btn"> {{ form_sb.title }}</p>
                 <button type="button" class="btn" id="duplicate-btn-sb" data-link='{% url 'scrumban_update' form_sb.id %}'><i class="fas fa-copy"></i> Copy</button>

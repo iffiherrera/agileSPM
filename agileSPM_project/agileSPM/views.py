@@ -70,6 +70,7 @@ def scrumForm(request):
 
 
 # Successful completion of form view.
+@login_required
 def scrum_success(request, id):
     complete_scrum_forms = SOWScrum.objects.filter(author=request.user)
     context_dict = {'id': id,
@@ -77,6 +78,7 @@ def scrum_success(request, id):
 
     return render(request,'agileSPM/scrum/done_scrum.html', context=context_dict)
 
+@login_required
 def scrumForm_update(request, id):
     instance = SOWScrum.objects.get(id=id)
     form = SOWScrumForm(data=request.POST or None, instance=instance)
@@ -96,7 +98,8 @@ def scrumForm_update(request, id):
         'form':form}
 
     return render(request, 'agileSPM/scrum/full_form.html', context=context_dict)
-   
+
+
 class DeleteScrumForm(DeleteView):
     model = SOWScrum
     template_name = 'agileSPM/delete_doc.html'
@@ -130,6 +133,7 @@ def kanbanForm(request):
     return render(request,'agileSPM/kanban/kanban_form.html', context=context_dict)
 
 # Successful completion of form view.
+@login_required
 def success_kanban(request, id):
     complete_kanban_forms = SOWKanban.objects.filter(author=request.user)
     context_dict = {'id': id,
@@ -137,6 +141,7 @@ def success_kanban(request, id):
 
     return render(request,'agileSPM/kanban/done_kanban.html', context=context_dict)
 
+@login_required
 def kanbanForm_update(request, id):
     instance = SOWKanban.objects.get(id=id)
     form = SOWKanbanForm(data=request.POST or None, instance=instance)
@@ -155,6 +160,7 @@ def kanbanForm_update(request, id):
         'form':form}
 
     return render(request, 'agileSPM/kanban/kanban_form.html', context=context_dict)
+
 
 class DeleteKanbanForm(DeleteView):
     model = SOWKanban
@@ -189,6 +195,7 @@ def scrumbanForm(request):
     return render(request,'agileSPM/scrumban/scrumban_form.html', context=context_dict)
 
 # Successful completion of form view.
+@login_required
 def success_scrumban(request, id):
     complete_scrumban_forms = SOWScrumban.objects.filter(author=request.user)
     context_dict = {'id': id,
@@ -196,6 +203,7 @@ def success_scrumban(request, id):
 
     return render(request,'agileSPM/scrumban/done_scrumban.html', context=context_dict)
 
+@login_required
 def scrumbanForm_update(request, id):
     instance = SOWScrumban.objects.get(id=id)
     form = SOWScrumbanForm(data=request.POST or None, instance=instance)
@@ -243,6 +251,7 @@ def my_docs(request):
     return render(request, 'agileSPM/docs.html', context=context_dict)
   
 # Scrum Document creation using docx-Python API
+@login_required
 def scrum_doc(request, id):
     user_input = SOWScrum.objects.get(id=id)
     
@@ -402,6 +411,7 @@ def scrum_doc(request, id):
     return render(request)
 
 # Kanban Document creation using docx-Python API
+@login_required
 def kanban_doc(request, id):
     user_input = SOWKanban.objects.get(id=id)
 
@@ -532,6 +542,7 @@ def kanban_doc(request, id):
     return render(request)
 
 # Scrumban Document creation using docx-Python API
+@login_required
 def scrumban_doc(request,id):
     user_input = SOWScrumban.objects.get(id=id)
 

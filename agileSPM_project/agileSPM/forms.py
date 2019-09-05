@@ -4,7 +4,6 @@ from .models import SOWScrum, SOWKanban, SOWScrumban
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 import datetime
-from django.views.generic.edit import UpdateView
 
 # User forms for sign up
 # Overriding the existing help_text with nothing to make sign up page cleaner.
