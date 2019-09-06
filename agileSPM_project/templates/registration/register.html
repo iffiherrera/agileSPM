@@ -13,8 +13,10 @@
 </head>
 
 {% block import_block %}
+<!-- external stylesheets from base and sign up -->
 <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
 <link href="{% static "css/signup.css" %}" rel="stylesheet" type="text/css" />
+<!-- fonts and icon library  -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
@@ -55,6 +57,7 @@
       <div class="divider">
       </div>
 
+<!-- registration pop up view with register specific form  -->
 
       <div class="modal-signup">
     <div class="modal-content">

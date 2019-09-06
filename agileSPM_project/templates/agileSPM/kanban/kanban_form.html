@@ -1,7 +1,7 @@
 
 {% extends 'agileSPM/base_agileSPM.html' %}
 {% load staticfiles %}
-{% load i18n %}
+
 <html>
         <head>
                 {% block title_block %}
@@ -12,6 +12,7 @@
         </head>
  
     {% block import_block %}
+    <!-- base and statement of work specific css style sheet -->
     <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
     <link href="{% static "css/sow.css" %}" rel="stylesheet" type="text/css" />
     {% endblock %}
@@ -21,27 +22,28 @@
     {% block body %}
 <div class="formBody">
 
+    <!-- side bar with specific kanban IDs to redirect on the same page -->
 <div class="sidebar">
-        <a href="#titleID">Cover Information</a>
-        <a href="#introID">Introduction</a>
-        <a href="#deliverablesID">Ojectives</a>
-        <a href="#scopeID">Scope</a>
-        <a href="#backlogID">Tasks</a>
-        <a href="#lengthID">Kanban delivery</a>
-        <a href="#milestonesID">Timescales</a>
-        <a href="#invoiceID">Project Cost</a>
-        <a href="#nameoneID">Acceptance</a>
+        <a href="#titleID_kanban">Cover Information</a>
+        <a href="#introID_kanban">Introduction</a>
+        <a href="#deliverablesID_kanban">Ojectives</a>
+        <a href="#scopeID_kanban">Scope</a>
+        <a href="#backlogID_kanban">Tasks</a>
+        <a href="#lengthID_kanban">Kanban delivery</a>
+        <a href="#planID">Timescales</a>
+        <a href="#invoiceID_kanban">Project Cost</a>
+        <a href="#nameoneID_kanban">Acceptance</a>
         <a href="{% url 'my_docs' %}">Home</a>
       </div>
 
 <div class="formBox">
-<form id="SOWForm" method="POST" value="SAVE">
+<form id="SOWForm" method="POST">
    
     {% csrf_token %}
    
     {{ form.as_p }}
 
-    <input type="submit" value="{% trans "SAVE" %}" />
+    <input type="submit" value="SAVE" />
 
 </form>
 </div>

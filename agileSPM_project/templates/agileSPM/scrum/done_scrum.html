@@ -12,8 +12,10 @@
         </head>
 
 {% block import_block %}
+<!-- base css and done specific style sheets -->
 <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
 <link href="{% static "css/done.css" %}" rel="stylesheet" type="text/css" />
+<!-- font and font awesome libraries -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -27,7 +29,7 @@
     
                 <i class="fas fa-check" id="check"></i>
                 <p>Your document was completed</p>
-              
+              <!-- download scrum document or return to my docs page -->
                 <button type="button" class="download-btn" data-link='{% url "scrum_doc" id %}'><i class="fas fa-file-word"></i> Download</button>
                 <button type="button" class="doc-btn" data-link='{% url "my_docs" %}'><i class="fas fa-home"></i> My Docs</button>
 
@@ -35,6 +37,7 @@
 {% endblock %}
 
 {% block end_block%}
+<!-- jquery library and done page specific script document -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="{% static "js/done_page.js" %}"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>

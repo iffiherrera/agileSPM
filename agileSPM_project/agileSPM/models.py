@@ -3,7 +3,9 @@ from django.forms import ModelForm
 import datetime
 from django.contrib.auth.models import User
 
-# Scrum Statement of Work model
+## The models for the system with all relevant fields, utilises SQLite3 and is based on Django's ORM. ##
+
+# Scrum Statement of Work model developed using the ER diagram presented in the project folder.
 class SOWScrum(models.Model):
     title = models.TextField(unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -38,6 +40,8 @@ class SOWScrum(models.Model):
     def save(self, *args, **kwargs):
         super(SOWScrum, self).save(*args, **kwargs)
 
+# Additional fields for invoices & milestones commented out and waiting integration to the rest of the code
+
 # class MilestonesScrum(models.Model):
 #     scrum = models.ForeignKey(SOWScrum, on_delete=models.CASCADE, blank=True)
 #     milestones_scrum = models.DateField(default=datetime.date.today, blank=True)
@@ -63,7 +67,7 @@ class SOWScrum(models.Model):
 #         super(InvoiceScrum, self).save(*args, **kwargs)
     
 
-# Kanban Statement of Work database fields
+## Kanban Statement of Work model developed using the ER diagram presented in the project folder.
 class SOWKanban(models.Model):
     
     title = models.TextField(unique=True)
@@ -96,6 +100,8 @@ class SOWKanban(models.Model):
     def save(self, *args, **kwargs):
         super(SOWKanban, self).save(*args, **kwargs)
 
+# Additional fields for invoices commented out and waiting integration to the rest of the code
+
 # class InvoiceKanban(models.Model):
 #     kanban = models.ForeignKey(SOWKanban, on_delete=models.CASCADE, blank=True)
 #     invoice_scrum = models.DateField(default=datetime.date.today, blank=True)
@@ -109,7 +115,7 @@ class SOWKanban(models.Model):
 #         super(InvoiceKanban, self).save(*args, **kwargs)
 
 
-# Scrumban Statement of Work database fields
+# Scrumban Statement of Work model developed using the ER diagram presented in the project folder.
 class SOWScrumban(models.Model):
     title = models.TextField(unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -144,6 +150,7 @@ class SOWScrumban(models.Model):
     def save(self, *args, **kwargs):
         super(SOWScrumban, self).save(*args, **kwargs)
 
+# Additional fields for invoices & milestones commented out and waiting integration to the rest of the code
 
 # class MilestonesScrumban(models.Model):
 #     scrumban = models.ForeignKey(SOWScrumban, on_delete=models.CASCADE, blank=True)

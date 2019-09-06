@@ -12,6 +12,7 @@
         </head>
 
 {% block import_block %}
+<!-- base css style shet and specific done stylesheet -->
 <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
 <link href="{% static "css/done.css" %}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -28,6 +29,7 @@
                 <i class="fas fa-check" id="check"></i>
                 <p>Your document was completed</p>
               
+                <!-- Download kanban document or return to my document created  -->
                 <button type="button" class="download-kanban-btn" data-link='{% url "kanban_doc" id %}'><i class="fas fa-file-word"></i> Download</button>
                 <button type="button" class="doc-kanban-btn" data-link='{% url "my_docs" %}'><i class="fas fa-home"></i> My Docs</button>
 
@@ -35,6 +37,7 @@
 {% endblock %}
 
 {% block end_block%}
+<!-- JQuery library and scripts  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="{% static "js/done_page.js" %}"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>

@@ -122,6 +122,6 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
 # Redirection points for login, logout and register. Ensures user is prompted to login when attempting to access restricted pages.
-LOGIN_URL = '/agileSPM/login/'
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/agileSPM/my_docs/'
 LOGOUT_REDIRECT_URL = '/agileSPM/'

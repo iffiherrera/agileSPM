@@ -40,6 +40,7 @@ class RegisterForm(UserCreationForm):
         
         return user
 
+# specific date input attribute to override default date widget
 class DateInput(forms.DateInput):
     input_type = 'date'
 

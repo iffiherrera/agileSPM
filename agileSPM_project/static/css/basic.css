@@ -18,6 +18,8 @@ a:hover {
     color: #fafafa;
 }
 
+/* HEADER CONTENT */
+
 .logo {
     position: absolute;
     float: left;
@@ -101,7 +103,7 @@ header {
     margin: 0;
     padding: 0;
     background: url('/static/images/block_home.jpg') no-repeat center center fixed;
-    /* Image by Engin Akyurt at Pixabay  */
+    /* Royalty free Image by Pixabay  */
     background-size: cover;
   
   }
@@ -142,7 +144,7 @@ header {
     width: 100%;
     height: 80vh;
     background: url('/static/images/intro.jpg') no-repeat center center fixed;
-    /* Image by Engin Akyurt at Pixabay  */
+    /* Royalty free Image by Engin Akyurt at Pixabay  */
     background-size: cover;
   }
   

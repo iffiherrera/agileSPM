@@ -1,3 +1,8 @@
+
+## All functionality for the user interface is included in the view, the view sits 
+# on server side and communicates with the templates through HTTP responses/requests using the URL paths in urls.py ##
+ 
+ 
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from docx import Document
@@ -11,9 +16,7 @@ import datetime
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeleteView
 
-def contact(request):
-    return render(request, 'agileSPM/base_agileSPM.html',{})
-
+# Register view saving user information to Django's User model.
 def register(request):
 
     if request.method == 'POST':
@@ -27,11 +30,11 @@ def register(request):
             print('username was succesful', username)
             return redirect('my_docs')
     else:
-        register_form = RegisterForm()
+        register_form = RegisterForm() # tailored register form with added email field
 
-    return render(request,'agileSPM/registration/register.html', {'register_form' : register_form})
+    return render(request,'registration/register.html', {'register_form' : register_form})
 
-# Home view 
+# Home view incorporating register view and login vew, also accessible by non-registered users.
 def index(request):
     user_form = RegisterForm()
     context_dict = {
@@ -40,25 +43,23 @@ def index(request):
     }
     return render(request, 'agileSPM/index.html', context=context_dict)
 
-# Scrum form 
+# Scrum form only accesible after authentication
 @login_required
 def scrumForm(request):
-    form = SOWScrumForm()
+    form = SOWScrumForm() # utilises the scrum model form in forms.py
 
     if request.method == 'POST':
         form = SOWScrumForm(data=request.POST or None) 
 
         if form.is_valid(): 
             form = form.save(commit=False)
-            form.author = request.user
-            # print('user', request.user)
+            form.author = request.user   
             form.save()
-            id = form.id
-            # print('id created:', id)
+            id = form.id #captures form id when success page is submitted. 
             return redirect('scrum_success', id=id)
 
         else:
-            print(form.errors)
+            print(form.errors) # send completion error to user if invalid input.
     
     else:
         form = SOWScrumForm()
@@ -69,7 +70,7 @@ def scrumForm(request):
     return render(request,'agileSPM/scrum/full_form.html', context=context_dict)
 
 
-# Successful completion of form view.
+# Successful completion of form view filtered by author. Ensures only documents created by specific authors is visible to relevant pages.
 @login_required
 def scrum_success(request, id):
     complete_scrum_forms = SOWScrum.objects.filter(author=request.user)
@@ -78,6 +79,7 @@ def scrum_success(request, id):
 
     return render(request,'agileSPM/scrum/done_scrum.html', context=context_dict)
 
+# Revisits a populated form belonging to the form id requested
 @login_required
 def scrumForm_update(request, id):
     instance = SOWScrum.objects.get(id=id)
@@ -87,8 +89,6 @@ def scrumForm_update(request, id):
     if form.is_valid():
         instance = form.save(commit=False)
         form.save()
-        # id = form.id
-        print('id edited:',id)
         return redirect('scrum_success', id=id)
 
     context_dict = {
@@ -99,30 +99,32 @@ def scrumForm_update(request, id):
 
     return render(request, 'agileSPM/scrum/full_form.html', context=context_dict)
 
-
+# Utilises Django's generic edit views, specifically deleteview which pairs the model 
+# and a template with verification of deletion intent, once delete, returns to the my docs page.
 class DeleteScrumForm(DeleteView):
     model = SOWScrum
     template_name = 'agileSPM/delete_doc.html'
     success_url = reverse_lazy('my_docs')
-           
+
+# Kanban form accesible only through authentication          
 @login_required
 def kanbanForm(request):
-    form = SOWKanbanForm()
+    form = SOWKanbanForm() # specialised Kanban form created in forms.py
 
     if request.method == 'POST':
         form = SOWKanbanForm(data=request.POST)
 
         if form.is_valid(): 
             form = form.save(commit=False)
-            form.author = request.user
-            # print('user', request.user)
+            form.author = request.user # matches author to the logged in user
+           
             form.save()
-            id = form.id
-            # print('id created:', id)
+            id = form.id # captures form id to pass to other views.
+         
             return redirect('success_kanban', id=id)
 
         else:
-            print(form.errors)
+            print(form.errors) # print errors when invalid input
     
     else:
         form = SOWKanbanForm()
@@ -135,12 +137,13 @@ def kanbanForm(request):
 # Successful completion of form view.
 @login_required
 def success_kanban(request, id):
-    complete_kanban_forms = SOWKanban.objects.filter(author=request.user)
+    complete_kanban_forms = SOWKanban.objects.filter(author=request.user) # shows only kanban forms matched to the logged in user
     context_dict = {'id': id,
                     'complete_kanban_forms': complete_kanban_forms}
 
     return render(request,'agileSPM/kanban/done_kanban.html', context=context_dict)
 
+# Revisits a populated form belonging to the form id requested
 @login_required
 def kanbanForm_update(request, id):
     instance = SOWKanban.objects.get(id=id)
@@ -149,8 +152,7 @@ def kanbanForm_update(request, id):
     if form.is_valid():
         instance = form.save(commit=False)
         form.save()
-        # id = form.id
-        print('id edited:',id)
+        
         return redirect('success_kanban', id=id)
 
     context_dict = {
@@ -161,12 +163,14 @@ def kanbanForm_update(request, id):
 
     return render(request, 'agileSPM/kanban/kanban_form.html', context=context_dict)
 
-
+# Utilises Django's generic edit views, specifically deleteview which pairs the model 
+# and a template with verification of deletion intent, once delete, returns to the my docs page.
 class DeleteKanbanForm(DeleteView):
     model = SOWKanban
     template_name = 'agileSPM/delete_doc.html'
     success_url = reverse_lazy('my_docs')
 
+# Scrumban form accesible only through authentication 
 @login_required
 def scrumbanForm(request):
     form = SOWScrumbanForm()
@@ -176,15 +180,15 @@ def scrumbanForm(request):
 
         if form.is_valid(): 
             form = form.save(commit=False)
-            form.author = request.user
-            print('user', request.user)
+            form.author = request.user # matches logged in user to the author of the document
+            
             form.save()
-            id = form.id
-            print('id created:', id)
+            id = form.id # saves the instances of form id to be passed to other views through URL.
+            
             return redirect('success_scrumban', id=id)
 
         else:
-            print(form.errors)
+            print(form.errors) # prints error messages if invalid input.
     
     else:
         form = SOWScrumbanForm()
@@ -197,12 +201,13 @@ def scrumbanForm(request):
 # Successful completion of form view.
 @login_required
 def success_scrumban(request, id):
-    complete_scrumban_forms = SOWScrumban.objects.filter(author=request.user)
+    complete_scrumban_forms = SOWScrumban.objects.filter(author=request.user) #match to logged in user
     context_dict = {'id': id,
                     'complete_scrumban_forms': complete_scrumban_forms}
 
     return render(request,'agileSPM/scrumban/done_scrumban.html', context=context_dict)
 
+# Revisits a populated form belonging to the form id requested
 @login_required
 def scrumbanForm_update(request, id):
     instance = SOWScrumban.objects.get(id=id)
@@ -211,8 +216,6 @@ def scrumbanForm_update(request, id):
     if form.is_valid():
         instance = form.save(commit=False)
         form.save()
-        # id = form.id
-        print('id edited:',id)
         return redirect('success_scrumban', id=id)
 
     context_dict = {
@@ -223,12 +226,14 @@ def scrumbanForm_update(request, id):
 
     return render(request, 'agileSPM/scrumban/scrumban_form.html', context=context_dict)
 
+# Utilises Django's generic edit views, specifically deleteview which pairs the model 
+# and a template with verification of deletion intent, once delete, returns to the my docs page.
 class DeleteScrumbanForm(DeleteView):
     model = SOWScrumban
     template_name = 'agileSPM/delete_doc.html'
     success_url = reverse_lazy('my_docs')
 
-# User account view 
+# User account view with all relevant documents for Scrum, Kanban and Scrumban forms specific to one user. 
 @login_required
 def my_docs(request):
 
@@ -236,24 +241,18 @@ def my_docs(request):
     user_kanban_forms = SOWKanban.objects.filter(author=request.user)
     user_scrumban_forms = SOWScrumban.objects.filter(author=request.user)
 
-    print('scrum',user_scrum_forms)
-    print('kanban',user_kanban_forms)
-    print('scrumban',user_scrumban_forms)
-
     context_dict = {'user': request.user,
                     'id': id,
                     'user_scrum_forms': user_scrum_forms,
                     'user_kanban_forms': user_kanban_forms,
                     'user_scrumban_forms': user_scrumban_forms }
-   
-    print('user',request.user)
 
     return render(request, 'agileSPM/docs.html', context=context_dict)
   
 # Scrum Document creation using docx-Python API
 @login_required
 def scrum_doc(request, id):
-    user_input = SOWScrum.objects.get(id=id)
+    user_input = SOWScrum.objects.get(id=id) # takes form id and captures user input to match to the document.
     
 ## Document formatting, rules & styles ##
     s_project = Document()
@@ -413,7 +412,7 @@ def scrum_doc(request, id):
 # Kanban Document creation using docx-Python API
 @login_required
 def kanban_doc(request, id):
-    user_input = SOWKanban.objects.get(id=id)
+    user_input = SOWKanban.objects.get(id=id) # takes form id and captures user input to match to the document.
 
 ## Document formatting,rules & styles ##
     k_project = Document()
@@ -544,7 +543,7 @@ def kanban_doc(request, id):
 # Scrumban Document creation using docx-Python API
 @login_required
 def scrumban_doc(request,id):
-    user_input = SOWScrumban.objects.get(id=id)
+    user_input = SOWScrumban.objects.get(id=id) # takes form id and captures user input to match to the document.
 
 ## Document formatting, styles and rules ##
     sb_project = Document()

@@ -10,10 +10,14 @@
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% block import_block %}
+        <!-- external specialised style sheet ensuring separation of concerns when implementing the base -->
         <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
+        <!-- font awesome icon library -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         {% endblock %}    
     </head>
+
+    <!-- header and navigation bar -->
     <body>
       <div class="container">
               <nav>
@@ -25,6 +29,7 @@
                   </div>
                   <div class="menu">
                       <ul>
+                        <!-- authentication requirements using django authentication tags -->
                           {% if user.is_authenticated %}
                           <li><a href="{% url 'logout' %}">Logout</a></li> 
                           {% else %}

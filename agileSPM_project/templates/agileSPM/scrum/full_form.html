@@ -12,6 +12,7 @@
         </head>
  
     {% block import_block %}
+    <!-- stylesheet for statement of work and base template -->
     <link href="{% static "css/basic.css" %}" rel="stylesheet" type="text/css" />
     <link href="{% static "css/sow.css" %}" rel="stylesheet" type="text/css" />
     {% endblock %}
@@ -20,7 +21,7 @@
 
     {% block body %}
 <div class="formBody">
-
+<!-- redirects to specific fields in the scrum document -->
 <div class="sidebar">
         <a href="#titleID">Cover Information</a>
         <a href="#introID">Introduction</a>
@@ -38,7 +39,7 @@
 <form method="POST" action=""> 
    
     {% csrf_token %}
-   
+   <!-- django form tag divided into set paragraphs -->
     {{ form.as_p }}
 
     <input type="submit" value="SAVE" />

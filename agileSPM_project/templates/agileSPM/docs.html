@@ -2,6 +2,9 @@
 {% extends 'agileSPM/base_agileSPM.html' %}
 {% load staticfiles %}
 
+<!-- User account template with functionality for determining what type of document
+    should be visualised to the user based on what objects is created. Uses html, css, jquery and django specific template tags-->
+
 <html>
     <head>
             {% block title_block %}
@@ -24,7 +27,7 @@
     <div>
 {% block body %}
 <div class="doc_page">
-
+<!-- Creation links to specific documents -->
     <div class="doc">
     <a href="{% url 'scrum_form' %}"><i class="fas fa-plus-square" id="addDoc"></i></a> 
     <p id="text-para"> Create Scrum Document</p> </div>
@@ -41,9 +44,11 @@
             {% for forms in user_scrum_forms %}
               
                 <div class="card">
+                      <!-- sets the document type name at the top of the card -->
                     <p>Scrum</p>
                 <a href="{% url 'scrum_update' forms.id %}"><i class="fas fa-file" id="file"></i></a>
                     <p id="text-btn"> {{ forms.title }}</p>
+                    <!-- buttons available to users - edit, delete, download and duplicate -->
                     <button type="button" class="btn" id="duplicate-btn" data-link='{% url 'scrum_update' forms.id %}'><i class="fas fa-copy"></i> Copy</button>
                     <button type="button" class="btn" id="edit-btn" data-link='{% url 'scrum_update' forms.id %}'><i class="fas fa-edit"></i> Edit</button>
                     <br/>
@@ -57,9 +62,11 @@
                        {% for form_kanban in user_kanban_forms %}
               
                        <div class="card">
+                             <!-- sets the document type name at the top of the card -->
                             <p>Kanban</p>
                        <a href="{% url 'kanban_update' form_kanban.id %}"><i class="fas fa-file" id="file"></i></a>
                            <p id="text-btn"> {{ form_kanban.title }}</p>
+                            <!-- buttons available to users - edit, delete, download and duplicate -->
                            <button type="button" class="btn" id="duplicate-btn-kanban" data-link='{% url 'kanban_update' form_kanban.id %}'><i class="fas fa-copy"></i> Copy</button>
                            <button type="button" class="btn" id="edit-btn-kanban" data-link='{% url 'kanban_update' form_kanban.id %}'><i class="fas fa-edit"></i> Edit</button>
                            <br/>
@@ -73,9 +80,11 @@
             {% for form_sb in user_scrumban_forms %}
               
             <div class="card">
-                    <p>Scrumban</p>
+                    <!-- sets the document type name at the top of the card -->
+                    <p>Scrumban</p> 
             <a href="{% url 'scrumban_update' form_sb.id %}"><i class="fas fa-file" id="file"></i></a>
                 <p id="text-btn"> {{ form_sb.title }}</p>
+                 <!-- buttons available to users - edit, delete, download and duplicate -->
                 <button type="button" class="btn" id="duplicate-btn-sb" data-link='{% url 'scrumban_update' form_sb.id %}'><i class="fas fa-copy"></i> Copy</button>
                 <button type="button" class="btn" id="edit-btn-sb" data-link='{% url 'scrumban_update' form_sb.id %}'><i class="fas fa-edit"></i> Edit</button>
                 <br/>

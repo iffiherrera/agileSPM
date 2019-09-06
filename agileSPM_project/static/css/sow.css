@@ -14,7 +14,7 @@ div .body-content {
   text-align: left;
 
 }
-
+/* Sidebar content visible on side of form which directs user to specific fields in the doc*/
 .sidebar {
     margin: 38px 0px 0px 0px;
     padding: 0;

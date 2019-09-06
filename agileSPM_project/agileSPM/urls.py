@@ -1,3 +1,6 @@
+
+# All url patterns matched to the views used in te system
+
 from django.conf.urls import url
 from django.urls import path
 from agileSPM import views
@@ -14,17 +17,13 @@ from .models import SOWKanban, SOWScrum, SOWScrumban
 urlpatterns = [
     path('',views.index, name='index'),
     path('my_docs/', views.my_docs, name='my_docs'),
-    path('contact/', views.contact, name='contact'),
-    
-
+ 
     # Scrum specific URLs
     path('scrum_form/' , views.scrumForm, name='scrum_form'),
     path('scrum_form/delete/<int:pk>/', DeleteScrumForm.as_view(), name='scrum_form_delete'),
     path('scrum_form/update/<int:id>/', views.scrumForm_update, name='scrum_update'),
     path('scrum_doc/<int:id>/', views.scrum_doc, name='scrum_doc'),
     path('scrum_success/<int:id>/', views.scrum_success, name='scrum_success'),
-    # path('scrum_form/edit/<int:pk>/', Edit_scrum_form.as_view(), name="edit_scrum_form"),
-    # path('edit_success_scrum/<int:id>/', views.edit_success_scrum, name='edit_success_scrum'),
     
     #Kanban specific URLs
     path('kanban_form/' , views.kanbanForm, name='kanban_form'),
@@ -32,9 +31,6 @@ urlpatterns = [
     path('kanban_form/edit/<int:id>/', views.kanbanForm_update, name="kanban_update"),
     path('kanban_success/<int:id>/', views.success_kanban, name='success_kanban'),
     path('kanban_doc/<int:id>/', views.kanban_doc, name='kanban_doc'),
-    # path('edit_success_kanban/<int:id>/', views.edit_success_kanban, name='edit_success_kanban'),
-    
-    
 
     #Scrumban specific URLs
     path('scrumban_form/' , views.scrumbanForm, name='scrumban_form'),
